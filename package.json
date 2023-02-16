@@ -49,5 +49,12 @@
     "url": "https://github.com/br14n-sol/Query-Builder-for-DriveAPI/issues"
   },
   "homepage": "https://github.com/br14n-sol/Query-Builder-for-DriveAPI#readme",
-  "keywords": []
+  "keywords": [
+    "drive",
+    "driveapi",
+    "google",
+    "googleapis",
+    "query",
+    "query builder"
+  ]
 }

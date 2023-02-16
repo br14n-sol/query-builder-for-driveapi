@@ -1,0 +1,53 @@
+{
+  "name": "query-builder-for-driveapi",
+  "author": "Brian Fernandez",
+  "description": "Easily generate queries for the Google Drive API.",
+  "version": "0.0.0",
+  "license": "MIT",
+  "main": "./lib/index.js",
+  "types": "./lib/index.d.ts",
+  "type": "module",
+  "exports": {
+    "require": "./lib/index.cjs",
+    "import": "./lib/index.js"
+  },
+  "files": [
+    "./lib"
+  ],
+  "scripts": {
+    "prepare": "husky install",
+    "lint": "eslint src --ext .ts",
+    "prebuild": "npm run lint",
+    "build": "tsup --config tsup.config.json"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run lint"
+    }
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^17.4.2",
+    "@commitlint/config-conventional": "^17.4.2",
+    "@typescript-eslint/eslint-plugin": "^5.51.0",
+    "eslint": "^8.34.0",
+    "eslint-config-standard-with-typescript": "^34.0.0",
+    "eslint-plugin-import": "^2.27.5",
+    "eslint-plugin-n": "^15.6.1",
+    "eslint-plugin-promise": "^6.1.1",
+    "husky": "^8.0.3",
+    "tsup": "^6.6.3",
+    "typescript": "^4.9.5"
+  },
+  "engines": {
+    "node": ">= 12.10"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/br14n-sol/Query-Builder-for-DriveAPI.git"
+  },
+  "bugs": {
+    "url": "https://github.com/br14n-sol/Query-Builder-for-DriveAPI/issues"
+  },
+  "homepage": "https://github.com/br14n-sol/Query-Builder-for-DriveAPI#readme",
+  "keywords": []
+}

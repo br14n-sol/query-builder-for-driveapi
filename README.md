@@ -1,5 +1,10 @@
 # Query Builder for DriveAPI
 
+![npm](https://img.shields.io/npm/v/query-builder-for-driveapi)
+![npm bundle size](https://img.shields.io/bundlephobia/minzip/query-builder-for-driveapi)
+![npm](https://img.shields.io/npm/dm/query-builder-for-driveapi)
+![Libraries.io SourceRank](https://img.shields.io/librariesio/sourcerank/npm/query-builder-for-driveapi)
+
 Easily generate queries for the Google Drive API.
 
 ## 📦 Installation
@@ -53,14 +58,14 @@ Commonly used terms and operators are supported. You can find a list of all thos
 
 ### Terms
 
-| Term           | Method                      |  Return  |                                                                                       Description                                                                                       |
-|----------------|-----------------------------|----------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `parents`      | inParents(folderId: string) | Instance | Indicates whether the `parent` collection contains the specified ID.                                                                                                                    |
-| `name`         | name()                      | Instance | Select the term `name` to be used with methods like: `contains()`, `isEqualTo()` and `isNotEqualTo()`                                                                                   |
-| `fullText`     | fullText()                  | Instance | Select the term `fullText` to be used with methods like: `contains()`                                                                                                                   |
-| `mimeType`     | mimeType()                  | Instance | Select the term `mimeType` to be used with methods like: `contains()`, `isEqualTo()` and `isNotEqualTo()`                                                                               |
-| `modifiedTime` | modifiedTime()              | Instance | Select the term `modifiedTime` to be used with methods like: `isLessThan()`, `isLessThanOrEqualTo()`, `isEqualTo()`, `isNotEqualTo()`, `isGreaterThanOrEqualTo()` and `isGreaterThan()` |
-| `createdTime`  | createdTime()               | Instance | Select the term `createdTime` to be used with methods like: `isLessThan()`, `isLessThanOrEqualTo()`, `isEqualTo()`, `isNotEqualTo()`, `isGreaterThanOrEqualTo()` and `isGreaterThan()`  |
+| Term           | Method                        | Return   | Description                                                                                                                                                                             |
+|----------------|-------------------------------|----------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `parents`      | `inParents(folderId: string)` | Instance | Indicates whether the `parent` collection contains the specified ID.                                                                                                                    |
+| `name`         | `name()`                      | Instance | Select the term `name` to be used with methods like: `contains()`, `isEqualTo()` and `isNotEqualTo()`                                                                                   |
+| `fullText`     | `fullText()`                  | Instance | Select the term `fullText` to be used with methods like: `contains()`                                                                                                                   |
+| `mimeType`     | `mimeType()`                  | Instance | Select the term `mimeType` to be used with methods like: `contains()`, `isEqualTo()` and `isNotEqualTo()`                                                                               |
+| `modifiedTime` | `modifiedTime()`              | Instance | Select the term `modifiedTime` to be used with methods like: `isLessThan()`, `isLessThanOrEqualTo()`, `isEqualTo()`, `isNotEqualTo()`, `isGreaterThanOrEqualTo()` and `isGreaterThan()` |
+| `createdTime`  | `createdTime()`               | Instance | Select the term `createdTime` to be used with methods like: `isLessThan()`, `isLessThanOrEqualTo()`, `isEqualTo()`, `isNotEqualTo()`, `isGreaterThanOrEqualTo()` and `isGreaterThan()`  |
 
 ### Operators
 

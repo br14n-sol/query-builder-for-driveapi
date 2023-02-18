@@ -1,96 +1,89 @@
 class QueryBuilder {
   private readonly queries: string[] = []
-  private negateNext: boolean = false
-  private lastField: string = ''
+  private negateNextTerm: boolean = false
+  private lastTerm: string = ''
 
-  not () {
-    this.negateNext = true
-    return this
-  }
-
-  contains (value: string) {
-    let query = this.negateNext ? 'not ' : ''
-    query += `${this.lastField} contains '${value}'`
+  private addInput (operator: string, value: string): void {
+    let query = this.negateNextTerm ? 'not ' : ''
+    query += `${this.lastTerm} ${operator} '${value}'`
 
     this.queries.push(query)
+  }
+
+  not (): this {
+    this.negateNextTerm = true
     return this
   }
 
-  isEqualTo (value: string) {
-    let query = this.negateNext ? 'not ' : ''
-    query += `${this.lastField} = '${value}'`
+  contains (value: string): this {
+    this.addInput('contains', value)
 
-    this.queries.push(query)
     return this
   }
 
-  isNotEqualTo (value: string) {
-    let query = this.negateNext ? 'not ' : ''
-    query += `${this.lastField} != '${value}'`
+  isEqualTo (value: string): this {
+    this.addInput('=', value)
 
-    this.queries.push(query)
     return this
   }
 
-  isLessThan (value: string) {
-    let query = this.negateNext ? 'not ' : ''
-    query += `${this.lastField} < '${value}'`
+  isNotEqualTo (value: string): this {
+    this.addInput('!=', value)
 
-    this.queries.push(query)
     return this
   }
 
-  isLessThanOrEqualTo (value: string) {
-    let query = this.negateNext ? 'not ' : ''
-    query += `${this.lastField} <= '${value}'`
+  isLessThan (value: string): this {
+    this.addInput('<', value)
 
-    this.queries.push(query)
     return this
   }
 
-  isGreaterThan (value: string) {
-    let query = this.negateNext ? 'not ' : ''
-    query += `${this.lastField} > '${value}'`
+  isLessThanOrEqualTo (value: string): this {
+    this.addInput('<=', value)
 
-    this.queries.push(query)
     return this
   }
 
-  isGreaterThanOrEqualTo (value: string) {
-    let query = this.negateNext ? 'not ' : ''
-    query += `${this.lastField} >= '${value}'`
+  isGreaterThan (value: string): this {
+    this.addInput('>', value)
 
-    this.queries.push(query)
     return this
   }
 
-  inParents (folderId: string) {
+  isGreaterThanOrEqualTo (value: string): this {
+    this.addInput('>=', value)
+
+    return this
+  }
+
+  inParents (folderId: string): this {
     this.queries.push(`'${folderId}' in parents`)
     return this
   }
 
-  name () {
-    this.lastField = 'name'
+  name (): this {
+    this.lastTerm = 'name'
     return this
   }
 
-  fullText () {
-    this.lastField = 'fullText'
+  fullText (): this {
+    this.lastTerm = 'fullText'
     return this
   }
 
-  mimeType () {
-    this.lastField = 'mimeType'
+  mimeType (): this {
+    this.lastTerm = 'mimeType'
     return this
   }
 
-  modifiedTime () {
-    this.lastField = 'modifiedTime'
+  modifiedTime (): this {
+    this.lastTerm = 'modifiedTime'
     return this
   }
 
-  createdTime () {
-    this.lastField = 'createdTime'
+  createdTime (): this {
+    this.lastTerm = 'createdTime'
     return this
   }
 

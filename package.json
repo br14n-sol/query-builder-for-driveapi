@@ -21,10 +21,8 @@
     "prebuild": "npm run lint",
     "build": "tsup --config tsup.config.json"
   },
-  "husky": {
-    "hooks": {
-      "pre-commit": "npm run lint"
-    }
+  "lint-staged": {
+    "*.ts": "npm run lint:fix"
   },
   "devDependencies": {
     "@commitlint/cli": "^18.4.2",

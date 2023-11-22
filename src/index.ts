@@ -57,8 +57,11 @@ class QueryBuilder {
     return this
   }
 
-  inParents (folderId: string): this {
-    this.queries.push(`'${folderId}' in parents`)
+  inParents (folders: string | string[]): this {
+    const query = Array.isArray(folders)
+      ? `(${folders.map((id) => `'${id}' in parents`).join(' or ')})`
+      : `'${folders}' in parents`
+    this.queries.push(query)
     return this
   }
 

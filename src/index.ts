@@ -58,7 +58,8 @@ class QueryBuilder {
   }
 
   inParents (folders: string | string[]): this {
-    const query = Array.isArray(folders)
+    let query = this.negateNextTerm ? 'not ' : ''
+    query += Array.isArray(folders)
       ? `(${folders.map((id) => `'${id}' in parents`).join(' or ')})`
       : `'${folders}' in parents`
     this.queries.push(query)

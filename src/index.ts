@@ -4,7 +4,13 @@ class QueryBuilder {
   private lastTerm: string = ''
 
   private addInput (operator: string, value: string): void {
-    let query = this.negateNextTerm ? 'not ' : ''
+    let query = ''
+
+    if (this.negateNextTerm) {
+      this.negateNextTerm = false
+      query += 'not '
+    }
+
     query += `${this.lastTerm} ${operator} '${value}'`
 
     this.queries.push(query)
@@ -58,10 +64,17 @@ class QueryBuilder {
   }
 
   inParents (folders: string | string[]): this {
-    let query = this.negateNextTerm ? 'not ' : ''
+    let query = ''
+
+    if (this.negateNextTerm) {
+      this.negateNextTerm = false
+      query += 'not '
+    }
+
     query += Array.isArray(folders)
       ? `(${folders.map((id) => `'${id}' in parents`).join(' or ')})`
       : `'${folders}' in parents`
+
     this.queries.push(query)
     return this
   }

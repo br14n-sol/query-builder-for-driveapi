@@ -19,7 +19,7 @@
     "lint": "eslint src --ext .ts",
     "lint:fix": "eslint src --ext .ts --fix",
     "prebuild": "npm run lint",
-    "build": "tsup --config tsup.config.json"
+    "build": "tsup --config tsup.config.json && fix-tsup-cjs --cwd lib"
   },
   "lint-staged": {
     "*.ts": "npm run lint:fix"
@@ -33,6 +33,7 @@
     "eslint-plugin-import": "^2.29.0",
     "eslint-plugin-n": "^16.3.1",
     "eslint-plugin-promise": "^6.1.1",
+    "fix-tsup-cjs": "^1.2.0",
     "husky": "^8.0.3",
     "lint-staged": "^15.1.0",
     "tsup": "^7.3.0",

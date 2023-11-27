@@ -1,20 +1,70 @@
+enum Operator {
+  CONTAINS = 'contains',
+  EQUAL = '=',
+  UNEQUAL = '!=',
+  LESS_THAN = '<',
+  LESS_THAN_OR_EQUAL = '<=',
+  GREATER_THAN = '>',
+  GREATER_THAN_OR_EQUAL = '>=',
+  IN = 'in',
+  AND = 'and',
+  OR = 'or',
+  NOT = 'not',
+  HAS = 'has'
+}
+
+export enum Collection {
+  PARENTS = 'parents',
+  OWNERS = 'owners',
+  WRITERS = 'writers',
+  READERS = 'readers'
+}
+
+enum File {
+  NAME = 'name',
+  FULL_TEXT = 'fullText',
+  MIME_TYPE = 'mimeType',
+  MODIFIED_TIME = 'modifiedTime',
+  CREATED_TIME = 'createdTime'
+}
+
+enum QueryType {
+  COLLECTION,
+  FILE
+}
+
+type QueryTerm = Collection | File
+
+const QueryTemplate = {
+  [QueryType.COLLECTION]: (value: string, operator: Operator, collection: QueryTerm) => `'${value}' ${operator} ${collection}`,
+  [QueryType.FILE]: (value: string, operator: Operator, term: QueryTerm) => `${term} ${operator} '${value}'`
+}
+
 class QueryBuilder {
   private readonly queries: string[] = []
   private negateNextTerm: boolean = false
-  private lastTerm: string = ''
+  private lastTerm: QueryTerm = Collection.PARENTS
 
-  private addInput (operator: string, value: string): void {
+  private addQuery (type: QueryType, operator: Operator, values: string | string[]): void {
     let query = ''
 
     if (this.negateNextTerm) {
       this.negateNextTerm = false
-      query += 'not '
+      query += `${Operator.NOT} `
     }
 
-    query += `${this.lastTerm} ${operator} '${value}'`
+    if (Array.isArray(values)) {
+      query += `(${
+        values.map(v => QueryTemplate[type](v, operator, this.lastTerm)).join(` ${Operator.OR} `)
+      })`
+    } else {
+      query += QueryTemplate[type](values, operator, this.lastTerm)
+    }
 
     this.queries.push(query)
   }
+
+  // Comparison methods (query operators)
 
   not (): this {
     this.negateNextTerm = true
@@ -22,90 +72,83 @@ class QueryBuilder {
   }
 
   contains (value: string): this {
-    this.addInput('contains', value)
+    this.addQuery(QueryType.FILE, Operator.CONTAINS, value)
 
     return this
   }
 
   isEqualTo (value: string): this {
-    this.addInput('=', value)
+    this.addQuery(QueryType.FILE, Operator.EQUAL, value)
 
     return this
   }
 
   isNotEqualTo (value: string): this {
-    this.addInput('!=', value)
+    this.addQuery(QueryType.FILE, Operator.UNEQUAL, value)
 
     return this
   }
 
   isLessThan (value: string): this {
-    this.addInput('<', value)
+    this.addQuery(QueryType.FILE, Operator.LESS_THAN, value)
 
     return this
   }
 
   isLessThanOrEqualTo (value: string): this {
-    this.addInput('<=', value)
+    this.addQuery(QueryType.FILE, Operator.LESS_THAN_OR_EQUAL, value)
 
     return this
   }
 
   isGreaterThan (value: string): this {
-    this.addInput('>', value)
+    this.addQuery(QueryType.FILE, Operator.GREATER_THAN, value)
 
     return this
   }
 
   isGreaterThanOrEqualTo (value: string): this {
-    this.addInput('>=', value)
+    this.addQuery(QueryType.FILE, Operator.GREATER_THAN_OR_EQUAL, value)
 
     return this
   }
 
-  inParents (folders: string | string[]): this {
-    let query = ''
+  // Term methods (query terms)
 
-    if (this.negateNextTerm) {
-      this.negateNextTerm = false
-      query += 'not '
-    }
+  inCollection (collection: Collection, values: string | string[]): this {
+    this.lastTerm = collection
+    this.addQuery(QueryType.COLLECTION, Operator.IN, values)
 
-    query += Array.isArray(folders)
-      ? `(${folders.map((id) => `'${id}' in parents`).join(' or ')})`
-      : `'${folders}' in parents`
-
-    this.queries.push(query)
     return this
   }
 
   name (): this {
-    this.lastTerm = 'name'
+    this.lastTerm = File.NAME
     return this
   }
 
   fullText (): this {
-    this.lastTerm = 'fullText'
+    this.lastTerm = File.FULL_TEXT
     return this
   }
 
   mimeType (): this {
-    this.lastTerm = 'mimeType'
+    this.lastTerm = File.MIME_TYPE
     return this
   }
 
   modifiedTime (): this {
-    this.lastTerm = 'modifiedTime'
+    this.lastTerm = File.MODIFIED_TIME
     return this
   }
 
   createdTime (): this {
-    this.lastTerm = 'createdTime'
+    this.lastTerm = File.CREATED_TIME
     return this
   }
 
   build (): string {
-    return this.queries.join(' and ')
+    return this.queries.join(` ${Operator.AND} `)
   }
 }
 

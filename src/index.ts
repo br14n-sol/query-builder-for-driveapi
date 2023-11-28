@@ -25,19 +25,22 @@ enum File {
   FULL_TEXT = 'fullText',
   MIME_TYPE = 'mimeType',
   MODIFIED_TIME = 'modifiedTime',
-  CREATED_TIME = 'createdTime'
+  CREATED_TIME = 'createdTime',
+  TRASHED = 'trashed'
 }
 
 enum QueryType {
   COLLECTION,
-  FILE
+  STRING,
+  BOOLEAN
 }
 
 type QueryTerm = Collection | File
 
 const QueryTemplate = {
   [QueryType.COLLECTION]: (value: string, operator: Operator, collection: QueryTerm) => `'${value}' ${operator} ${collection}`,
-  [QueryType.FILE]: (value: string, operator: Operator, term: QueryTerm) => `${term} ${operator} '${value}'`
+  [QueryType.STRING]: (value: string, operator: Operator, term: QueryTerm) => `${term} ${operator} '${value}'`,
+  [QueryType.BOOLEAN]: (value: string, operator: Operator, term: QueryTerm) => `${term} ${operator} ${value}`
 }
 
 class QueryBuilder {
@@ -53,12 +56,14 @@ class QueryBuilder {
       query += `${Operator.NOT} `
     }
 
+    if (typeof values === 'string') {
+      query += QueryTemplate[type](values, operator, this.lastTerm)
+    }
+
     if (Array.isArray(values)) {
       query += `(${
         values.map(v => QueryTemplate[type](v, operator, this.lastTerm)).join(` ${Operator.OR} `)
       })`
-    } else {
-      query += QueryTemplate[type](values, operator, this.lastTerm)
     }
 
     this.queries.push(query)
@@ -68,47 +73,48 @@ class QueryBuilder {
 
   not (): this {
     this.negateNextTerm = true
+
     return this
   }
 
   contains (value: string): this {
-    this.addQuery(QueryType.FILE, Operator.CONTAINS, value)
+    this.addQuery(QueryType.STRING, Operator.CONTAINS, value)
 
     return this
   }
 
   isEqualTo (value: string): this {
-    this.addQuery(QueryType.FILE, Operator.EQUAL, value)
+    this.addQuery(QueryType.STRING, Operator.EQUAL, value)
 
     return this
   }
 
   isNotEqualTo (value: string): this {
-    this.addQuery(QueryType.FILE, Operator.UNEQUAL, value)
+    this.addQuery(QueryType.STRING, Operator.UNEQUAL, value)
 
     return this
   }
 
   isLessThan (value: string): this {
-    this.addQuery(QueryType.FILE, Operator.LESS_THAN, value)
+    this.addQuery(QueryType.STRING, Operator.LESS_THAN, value)
 
     return this
   }
 
   isLessThanOrEqualTo (value: string): this {
-    this.addQuery(QueryType.FILE, Operator.LESS_THAN_OR_EQUAL, value)
+    this.addQuery(QueryType.STRING, Operator.LESS_THAN_OR_EQUAL, value)
 
     return this
   }
 
   isGreaterThan (value: string): this {
-    this.addQuery(QueryType.FILE, Operator.GREATER_THAN, value)
+    this.addQuery(QueryType.STRING, Operator.GREATER_THAN, value)
 
     return this
   }
 
   isGreaterThanOrEqualTo (value: string): this {
-    this.addQuery(QueryType.FILE, Operator.GREATER_THAN_OR_EQUAL, value)
+    this.addQuery(QueryType.STRING, Operator.GREATER_THAN_OR_EQUAL, value)
 
     return this
   }
@@ -122,28 +128,40 @@ class QueryBuilder {
     return this
   }
 
+  isTrashed (value: boolean): this {
+    this.lastTerm = File.TRASHED
+    this.addQuery(QueryType.BOOLEAN, Operator.EQUAL, `${value}`)
+
+    return this
+  }
+
   name (): this {
     this.lastTerm = File.NAME
+
     return this
   }
 
   fullText (): this {
     this.lastTerm = File.FULL_TEXT
+
     return this
   }
 
   mimeType (): this {
     this.lastTerm = File.MIME_TYPE
+
     return this
   }
 
   modifiedTime (): this {
     this.lastTerm = File.MODIFIED_TIME
+
     return this
   }
 
   createdTime (): this {
     this.lastTerm = File.CREATED_TIME
+
     return this
   }
 

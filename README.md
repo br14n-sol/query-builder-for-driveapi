@@ -195,6 +195,8 @@ Commonly used terms and operators are supported. You can find a list of all thos
 |-|-|-|
 | `build()` | String | Returns a string with the inputs joined with the `and` operator. |
 
-## License
+## Copyright & License
 
-MIT License © 2023 - [Brian Fernandez](https://twitter.com/br14n_sol)
+© 2023 - [Brian Fernandez](https://github.com/br14n-sol)
+
+This project is licensed under the MIT license. See the file [LICENSE](LICENSE) for details.

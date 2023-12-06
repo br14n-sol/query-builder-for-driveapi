@@ -200,3 +200,11 @@ Commonly used terms and operators are supported. You can find a list of all thos
 © 2023 - [Brian Fernandez](https://github.com/br14n-sol)
 
 This project is licensed under the MIT license. See the file [LICENSE](LICENSE) for details.
+
+## Disclaimer
+
+No affiliation with Google Inc.
+
+This package is a third-party offering and is not a product of Google Inc.
+
+Google Drive™ is a trademark of Google Inc.

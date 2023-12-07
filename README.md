@@ -1,199 +1,245 @@
 # Query Builder for DriveAPI
 
 ![node-current](https://img.shields.io/node/v/query-builder-for-driveapi?color=darkgreen)
-![npm](https://img.shields.io/npm/v/query-builder-for-driveapi?color=orange)
-![npm](https://img.shields.io/npm/dm/query-builder-for-driveapi)
+![version](https://img.shields.io/npm/v/query-builder-for-driveapi?color=orange)
+![downloads](https://img.shields.io/npm/dm/query-builder-for-driveapi)
 ![Libraries.io SourceRank](https://img.shields.io/librariesio/sourcerank/npm/query-builder-for-driveapi)
 
 Easily generate queries for the Google Drive API.
 
-## 📦 Installation
+## Installation
 
 ```shell
 npm install query-builder-for-driveapi
 ```
 
-## 🚀 Quick start
-
-### How to import
+## Importing
 
 ```js
-// ECMAScript
+// Using ES6 Imports
 import QueryBuilder, { Collection } from 'query-builder-for-driveapi'
 
-// CommonJS
+// Using CommonJS
 const QueryBuilder = require('query-builder-for-driveapi')
 const Collection = QueryBuilder.Collection
 ```
 
-### How to build a query
+## Usage
 
-1. Create a new instance
+```js
+// Create an instance
+const qb = new QueryBuilder()
 
-   ```js
-   const query = new QueryBuilder()
-   ```
+// Add inputs (queries)
+qb.inCollection(Collection.PARENTS, 'parent-id')
+qb.name().contains('something')
 
-2. Add inputs
+// Build inputs (queries) in a query
+const query = qb.build()
+//=> 'parent-id' in parents and name contains 'something'
+```
 
-   ```js
-   query.inCollection(Collection.PARENTS, 'folderId')
-   // ...
-   query.name().contains('something')
-   ```
+## API Reference
 
-   or
+### new QueryBuilder()
 
-   ```js
-   query
-      .inCollection(Collection.PARENTS, 'folderId')
-      .name().contains('something')
-   ```
+Returns a QueryBuilder instance.
 
-3. Build query
+```js
+const qb = new QueryBuilder()
+```
 
-   ```js
-   query.build() // return string
-   ```
+### \<Instance\>.inCollection(collection, values)
 
-## Methods
+Indicates whether the collection contains the specified values.
 
-Commonly used terms and operators are supported. You can find a list of all those supported by the Drive API at [Google Developers](https://developers.google.com/drive/api/guides/ref-search-terms).
+#### collection
 
-### Term methods (query terms)
+Type: `Collection`
 
-<table>
-   <thead>
-      <tr>
-         <th>Term</th>
-         <th>Method</th>
-         <th>Return</th>
-         <th>Description</th>
-      </tr>
-   </thead>
-   <tbody>
-      <tr>
-         <td>
-            <code>parents</code>
-         </td>
-         <td rowspan=4>
-            <code>
-               inCollection(collection: Collection, values: string | string[])
-            </code>
-         </td>
-         <td rowspan=4>Instance</td>
-         <td rowspan=4>
-            Indicates whether the collection contains the specified values.
-         </td>
-      </tr>
-      <tr>
-         <td>
-            <code>owners</code>
-         </td>
-      </tr>
-      <tr>
-         <td>
-            <code>writers</code>
-         </td>
-      </tr>
-      <tr>
-         <td>
-            <code>readers</code>
-         </td>
-      </tr>
-      <tr>
-         <td>
-            <code>trashed</code>
-         </td>
-         <td>
-            <code>isTrashed(value: boolean)</code>
-         </td>
-         <td>Instance</td>
-         <td>
-            Whether the file is in the trash or not.
-         </td>
-      </tr>
-      <tr>
-         <td>
-            <code>name</code>
-         </td>
-         <td>
-            <code>name()</code>
-         </td>
-         <td>Instance</td>
-         <td>
-            Select the term <code>name</code> to be used with methods like: <code>contains()</code>, <code>isEqualTo()</code> and <code>isNotEqualTo()</code>
-         </td>
-      </tr>
-      <tr>
-         <td>
-            <code>fullText</code>
-         </td>
-         <td>
-            <code>fullText()</code>
-         </td>
-         <td>Instance</td>
-         <td>
-            Select the term <code>fullText</code> to be used with methods like: <code>contains()</code>
-         </td>
-      </tr>
-      <tr>
-         <td>
-            <code>mimeType</code>
-         </td>
-         <td>
-            <code>mimeType()</code>
-         </td>
-         <td>Instance</td>
-         <td>
-            Select the term <code>mimeType</code> to be used with methods like: <code>contains()</code>, <code>isEqualTo()</code> and <code>isNotEqualTo()</code>
-         </td>
-      </tr>
-      <tr>
-         <td>
-            <code>modifiedTime</code>
-         </td>
-         <td>
-            <code>modifiedTime()</code>
-         </td>
-         <td>Instance</td>
-         <td>
-            Select the term <code>modifiedTime</code> to be used with methods like: <code>isLessThan()</code>, <code>isLessThanOrEqualTo()</code>, <code>isEqualTo()</code>, <code>isNotEqualTo()</code>, <code>isGreaterThanOrEqualTo()</code> and <code>isGreaterThan()</code>
-         </td>
-      </tr>
-      <tr>
-         <td>
-            <code>createdTime</code>
-         </td>
-         <td>
-            <code>createdTime()</code>
-         </td>
-         <td>Instance</td>
-         <td>
-            Select the term <code>createdTime</code> to be used with methods like: <code>isLessThan()</code>, <code>isLessThanOrEqualTo()</code>, <code>isEqualTo()</code>, <code>isNotEqualTo()</code>, <code>isGreaterThanOrEqualTo()</code> and <code>isGreaterThan()</code>
-         </td>
-      </tr>
-   </tbody>
-</table>
+- **Collection.PARENTS**:
+```js
+qb.inCollection(Collection.PARENTS, ...).build()
+//=> '...' in parents
+```
 
-### Comparison methods (query operators)
+- **Collection.OWNERS**:
+```js
+qb.inCollection(Collection.OWNERS, ...).build()
+//=> '...' in owners
+```
 
-| Operator | Method | Return | Description |
-|-|-|-|-|
-| `contains` | `contains(value: string)` | Instance | N/A |
-| `=` | `isEqualTo(value: string)` | Instance | N/A |
-| `!=` | `isNotEqualTo(value: string)` | Instance | N/A |
-| `<` | `isLessThan(value: string)` | Instance | N/A |
-| `<=` | `isLessThanOrEqualTo(value: string)` | Instance | N/A |
-| `>` | `isGreaterThan(value: string)` | Instance | N/A |
-| `>=` | `isGreaterThanOrEqualTo(value: string)` | Instance | N/A |
-| `not` | `not()` | Instance | Negate the following term. |
+- **Collection.WRITERS**:
+```js
+qb.inCollection(Collection.WRITERS, ...).build()
+//=> '...' in writers
+```
 
-### Build
+- **Collection.READERS**:
+```js
+qb.inCollection(Collection.READERS, ...).build()
+//=> '...' in readers
+```
 
-| Method | Return | Description |
-|-|-|-|
-| `build()` | String | Returns a string with the inputs joined with the `and` operator. |
+#### values
+
+Type: `string | string[]`
+
+```js
+qb.inCollection(..., 'value').build()
+//=> 'value' in ...
+
+qb.inCollection(..., ['value-1', 'value-2']).build()
+//=> ('value-1' in ... or 'value-2' in ...)
+```
+
+### \<Instance\>.isTrashed(boolean)
+
+Whether the file is in the trash or not.
+
+```js
+qb.isTrashed(true).build()
+//=> trashed = true
+```
+
+### \<Instance\>.name()
+
+Select the term `name` to be used with methods like: `contains()`, `isEqualTo()` and `isNotEqualTo()`
+
+```js
+qb.name().isEqualTo('something').build()
+//=> name = 'something'
+```
+
+### \<Instance\>.fullText()
+
+Select the term `fullText` to be used with methods like: `contains()`
+
+```js
+qb.fullText().contains('something').build()
+//=> fullText contains 'something'
+```
+
+### \<Instance\>.mimeType()
+
+Select the term `mimeType` to be used with methods like: `contains()`, `isEqualTo()` and `isNotEqualTo()`
+
+```js
+qb.mimeType().isNotEqualTo('application/vnd.google-apps.folder').build()
+//=> mimeType != 'application/vnd.google-apps.folder'
+```
+
+### \<Instance\>.modifiedTime()
+
+Select the term `modifiedTime` to be used with methods like: `isLessThan()`, `isLessThanOrEqualTo()`, `isEqualTo()`, `isNotEqualTo()`, `isGreaterThanOrEqualTo()` and `isGreaterThan()`
+
+```js
+qb.modifiedTime().isLessThan('2012-06-04T12:00:00').build()
+//=> modifiedTime < '2012-06-04T12:00:00'
+```
+
+### \<Instance\>.createdTime()
+
+Select the term `createdTime` to be used with methods like: `isLessThan()`, `isLessThanOrEqualTo()`, `isEqualTo()`, `isNotEqualTo()`, `isGreaterThanOrEqualTo()` and `isGreaterThan()`
+
+```js
+qb.createdTime().isGreaterThan('2012-06-04T12:00:00').build()
+//=> createdTime > '2012-06-04T12:00:00'
+```
+
+### \<Instance\>.contains(string)
+
+The string is present in the previously selected term.\
+**Valid for:** `name`, `fullText`, `mimeType`
+
+```js
+qb.name().contains('something').build()
+//=> name contains 'something'
+```
+
+### \<Instance\>.isEqualTo(string)
+
+The string is equal to the value of the previously selected term.\
+**Valid for:** `name`, `mimeType`, `modifiedTime`, `createdTime`
+
+```js
+qb.createdTime().isEqualTo('2012-06-04T12:00:00').build()
+//=> createdTime = '2012-06-04T12:00:00'
+```
+
+### \<Instance\>.isNotEqualTo(string)
+
+The string is not equal to the value of the previously selected term.\
+**Valid for:** `name`, `mimeType`, `modifiedTime`, `createdTime`
+
+```js
+qb.createdTime().isNotEqualTo('2012-06-04T12:00:00').build()
+//=> createdTime != '2012-06-04T12:00:00'
+```
+
+### \<Instance\>.isLessThan(string)
+
+The string that must be a date in [RFC 3339](https://datatracker.ietf.org/doc/html/rfc3339) format is less than the value of the previously selected term.\
+**Valid for:** `modifiedTime`, `createdTime`
+
+```js
+qb.createdTime().isLessThan('2012-06-04T12:00:00').build()
+//=> createdTime < '2012-06-04T12:00:00'
+```
+
+### \<Instance\>.isLessThanOrEqualTo(string)
+
+The string that must be a date in [RFC 3339](https://datatracker.ietf.org/doc/html/rfc3339) format is less than or equal to the value of the previously selected term.\
+**Valid for:** `modifiedTime`, `createdTime`
+
+```js
+qb.createdTime().isLessThanOrEqualTo('2012-06-04T12:00:00').build()
+//=> createdTime <= '2012-06-04T12:00:00'
+```
+
+### \<Instance\>.isGreaterThan(string)
+
+The string that must be a date in [RFC 3339](https://datatracker.ietf.org/doc/html/rfc3339) format is greater than the value of the previously selected term.\
+**Valid for:** `modifiedTime`, `createdTime`
+
+```js
+qb.createdTime().isGreaterThan('2012-06-04T12:00:00').build()
+//=> createdTime > '2012-06-04T12:00:00'
+```
+
+### \<Instance\>.isGreaterThanOrEqualTo(string)
+
+The string that must be a date in [RFC 3339](https://datatracker.ietf.org/doc/html/rfc3339) format is greater than or equal to the value of the previously selected term.\
+**Valid for:** `modifiedTime`, `createdTime`
+
+```js
+qb.createdTime().isGreaterThanOrEqualTo('2012-06-04T12:00:00').build()
+//=> createdTime >= '2012-06-04T12:00:00'
+```
+
+### \<Instance\>.not()
+
+Negate the immediately following input (query).
+
+```js
+qb.not().inCollection(Collection.PARENTS, 'parent-id').build()
+//=> not 'parent-id' in parents
+
+qb.not().inCollection(Collection.PARENTS, ['parent-1', 'parent-2']).build()
+//=> not ('parent-1' in parents or 'parent-2' in parents)
+```
+
+### \<Instance\>.build()
+
+Returns a string with the inputs joined with the `and` operator.
+
+```js
+qb.inCollection(Collection.PARENTS, 'parent-id')
+qb.name().contains('something')
+
+qb.build()
+//=> 'parent-id' in parents and name contains 'something'
+```
 
 ## Copyright & License
 

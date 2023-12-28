@@ -1,14 +1,17 @@
 {
+  "$schema": "./node_modules/tsup/schema.json",
   "name": "Build",
-  "entry": ["./src/**/*.ts"],
-  
+  "entry": [
+    "./src/**/*.ts"
+  ],
   "outDir": "./lib",
-  "format": ["esm", "cjs"],
-
+  "format": [
+    "esm",
+    "cjs"
+  ],
   "dts": true,
   "clean": true,
   "platform": "node",
   "bundle": false,
-
   "tsconfig": "./tsconfig.json"
 }

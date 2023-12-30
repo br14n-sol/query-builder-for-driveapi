@@ -112,6 +112,17 @@ class QueryBuilder {
     return this
   }
 
+  getByVisibility(visibilityLevel: string | string[]): this {
+    this.addQuery(QueryType.STRING, {
+      field: File.VISIBILITY,
+      op: Operator.EQUAL,
+      entry: Array.isArray(visibilityLevel)
+        ? visibilityLevel
+        : [visibilityLevel]
+    })
+    return this
+  }
+
   getByPublicProp(properties: Record<string, unknown>) {
     this.addQuery(QueryType.HASH, {
       field: File.PROPERTIES,

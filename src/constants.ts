@@ -26,6 +26,7 @@ export enum File {
   MIME_TYPE = 'mimeType',
   CREATED_TIME = 'createdTime',
   MODIFIED_TIME = 'modifiedTime',
+  VISIBILITY = 'visibilityLevel',
   PROPERTIES = 'properties',
   APP_PROPERTIES = 'appProperties',
   TRASHED = 'trashed'

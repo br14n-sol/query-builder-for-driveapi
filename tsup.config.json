@@ -2,7 +2,7 @@
   "$schema": "./node_modules/tsup/schema.json",
   "name": "Build",
   "entry": [
-    "./src/**/*.ts"
+    "./src/index.ts"
   ],
   "outDir": "./lib",
   "format": [
@@ -12,6 +12,7 @@
   "dts": true,
   "clean": true,
   "platform": "node",
-  "bundle": false,
-  "tsconfig": "./tsconfig.json"
+  "bundle": true,
+  "tsconfig": "./tsconfig.json",
+  "minify": true
 }

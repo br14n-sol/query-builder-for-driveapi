@@ -52,48 +52,6 @@ class QueryBuilder {
     return this
   }
 
-  contains(value: string): this {
-    this.addQuery(QueryType.STRING, Operator.CONTAINS, value)
-
-    return this
-  }
-
-  isEqualTo(value: string): this {
-    this.addQuery(QueryType.STRING, Operator.EQUAL, value)
-
-    return this
-  }
-
-  isNotEqualTo(value: string): this {
-    this.addQuery(QueryType.STRING, Operator.UNEQUAL, value)
-
-    return this
-  }
-
-  isLessThan(value: string): this {
-    this.addQuery(QueryType.STRING, Operator.LESS_THAN, value)
-
-    return this
-  }
-
-  isLessThanOrEqualTo(value: string): this {
-    this.addQuery(QueryType.STRING, Operator.LESS_THAN_OR_EQUAL, value)
-
-    return this
-  }
-
-  isGreaterThan(value: string): this {
-    this.addQuery(QueryType.STRING, Operator.GREATER_THAN, value)
-
-    return this
-  }
-
-  isGreaterThanOrEqualTo(value: string): this {
-    this.addQuery(QueryType.STRING, Operator.GREATER_THAN_OR_EQUAL, value)
-
-    return this
-  }
-
   // Term methods (query terms)
 
   inCollection(collection: Collection, values: string | string[]): this {

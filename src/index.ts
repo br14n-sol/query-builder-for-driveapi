@@ -15,7 +15,9 @@ const QueryTemplate = {
   [QueryType.STRING]: ({ field, op, entry }: QueryTemplateOptions) =>
     `${field} ${op} '${entry.value}'`,
   [QueryType.BOOLEAN]: ({ field, op, entry }: QueryTemplateOptions) =>
-    `${field} ${op} ${entry.value}`
+    `${field} ${op} ${entry.value}`,
+  [QueryType.HASH]: ({ field, op, entry }: QueryTemplateOptions) =>
+    `${field} ${op} { key='${entry?.key}' and value='${entry.value}' }`
 }
 
 type AddQueryOpts = {
@@ -106,6 +108,24 @@ class QueryBuilder {
       field: File.MODIFIED_TIME,
       op: Operator.EQUAL,
       entry: Array.isArray(timestamp) ? timestamp : [timestamp]
+    })
+    return this
+  }
+
+  getByPublicProp(properties: Record<string, unknown>) {
+    this.addQuery(QueryType.HASH, {
+      field: File.PROPERTIES,
+      op: Operator.HAS,
+      entry: properties
+    })
+    return this
+  }
+
+  getByPrivateProp(properties: Record<string, unknown>) {
+    this.addQuery(QueryType.HASH, {
+      field: File.APP_PROPERTIES,
+      op: Operator.HAS,
+      entry: properties
     })
     return this
   }

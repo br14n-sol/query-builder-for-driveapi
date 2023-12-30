@@ -24,13 +24,16 @@ export enum File {
   NAME = 'name',
   FULL_TEXT = 'fullText',
   MIME_TYPE = 'mimeType',
-  MODIFIED_TIME = 'modifiedTime',
   CREATED_TIME = 'createdTime',
+  MODIFIED_TIME = 'modifiedTime',
+  PROPERTIES = 'properties',
+  APP_PROPERTIES = 'appProperties',
   TRASHED = 'trashed'
 }
 
 export enum QueryType {
   COLLECTION = 0,
   STRING = 1,
-  BOOLEAN = 2
+  BOOLEAN = 2,
+  HASH = 3
 }

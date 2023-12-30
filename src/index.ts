@@ -1,29 +1,35 @@
 import { Collection, File, Operator, QueryType } from './constants.js'
 
-type QueryTerm = Collection | File
+type QueryTemplateOptions = {
+  field: File | Collection
+  op: Operator
+  entry: {
+    key?: string
+    value: unknown
+  }
+}
 
 const QueryTemplate = {
-  [QueryType.COLLECTION]: (
-    value: string,
-    operator: Operator,
-    collection: QueryTerm
-  ) => `'${value}' ${operator} ${collection}`,
-  [QueryType.STRING]: (value: string, operator: Operator, term: QueryTerm) =>
-    `${term} ${operator} '${value}'`,
-  [QueryType.BOOLEAN]: (value: string, operator: Operator, term: QueryTerm) =>
-    `${term} ${operator} ${value}`
+  [QueryType.COLLECTION]: ({ field, op, entry }: QueryTemplateOptions) =>
+    `'${entry.value}' ${op} ${field}`,
+  [QueryType.STRING]: ({ field, op, entry }: QueryTemplateOptions) =>
+    `${field} ${op} '${entry.value}'`,
+  [QueryType.BOOLEAN]: ({ field, op, entry }: QueryTemplateOptions) =>
+    `${field} ${op} ${entry.value}`
+}
+
+type AddQueryOpts = {
+  field: File | Collection
+  op: Operator
+  entry: Record<string, unknown> | string[]
 }
 
 class QueryBuilder {
   private readonly queries: string[] = []
   private negateNextTerm = false
-  private lastTerm: QueryTerm = Collection.PARENTS
 
-  private addQuery(
-    type: QueryType,
-    operator: Operator,
-    values: string | string[]
-  ): void {
+  private addQuery(type: QueryType, options: AddQueryOpts): void {
+    const { field, op, entry } = options
     let query = ''
 
     if (this.negateNextTerm) {
@@ -31,70 +37,85 @@ class QueryBuilder {
       query += `${Operator.NOT} `
     }
 
-    if (typeof values === 'string') {
-      query += QueryTemplate[type](values, operator, this.lastTerm)
+    const _queries = []
+    for (const key in entry) {
+      const value = entry[key as keyof typeof entry]
+      _queries.push(
+        QueryTemplate[type]({ field, op, entry: { key: `${key}`, value } })
+      )
     }
 
-    if (Array.isArray(values)) {
-      query += `(${values
-        .map(v => QueryTemplate[type](v, operator, this.lastTerm))
-        .join(` ${Operator.OR} `)})`
-    }
-
+    query += `(${_queries.join(
+      ` ${Array.isArray(entry) ? Operator.OR : Operator.AND} `
+    )})`
     this.queries.push(query)
   }
 
-  // Comparison methods (query operators)
-
   not(): this {
     this.negateNextTerm = true
-
     return this
   }
 
-  // Term methods (query terms)
+  getByCollection(collection: Collection, value: string | string[]): this {
+    this.addQuery(QueryType.COLLECTION, {
+      field: collection,
+      op: Operator.IN,
+      entry: Array.isArray(value) ? value : [value]
+    })
+    return this
+  }
 
-  inCollection(collection: Collection, values: string | string[]): this {
-    this.lastTerm = collection
-    this.addQuery(QueryType.COLLECTION, Operator.IN, values)
+  getByFileName(filename: string | string[]): this {
+    this.addQuery(QueryType.STRING, {
+      field: File.NAME,
+      op: Operator.EQUAL,
+      entry: Array.isArray(filename) ? filename : [filename]
+    })
+    return this
+  }
 
+  getByContent(value: string | string[]): this {
+    this.addQuery(QueryType.STRING, {
+      field: File.FULL_TEXT,
+      op: Operator.EQUAL,
+      entry: Array.isArray(value) ? value : [value]
+    })
+    return this
+  }
+
+  getByFileType(filetype: string | string[]): this {
+    this.addQuery(QueryType.STRING, {
+      field: File.MIME_TYPE,
+      op: Operator.EQUAL,
+      entry: Array.isArray(filetype) ? filetype : [filetype]
+    })
+    return this
+  }
+
+  getByCreatedAt(timestamp: string | string[]): this {
+    this.addQuery(QueryType.STRING, {
+      field: File.CREATED_TIME,
+      op: Operator.EQUAL,
+      entry: Array.isArray(timestamp) ? timestamp : [timestamp]
+    })
+    return this
+  }
+
+  getByUpdatedAt(timestamp: string | string[]): this {
+    this.addQuery(QueryType.STRING, {
+      field: File.MODIFIED_TIME,
+      op: Operator.EQUAL,
+      entry: Array.isArray(timestamp) ? timestamp : [timestamp]
+    })
     return this
   }
 
   isTrashed(value: boolean): this {
-    this.lastTerm = File.TRASHED
-    this.addQuery(QueryType.BOOLEAN, Operator.EQUAL, `${value}`)
-
-    return this
-  }
-
-  name(): this {
-    this.lastTerm = File.NAME
-
-    return this
-  }
-
-  fullText(): this {
-    this.lastTerm = File.FULL_TEXT
-
-    return this
-  }
-
-  mimeType(): this {
-    this.lastTerm = File.MIME_TYPE
-
-    return this
-  }
-
-  modifiedTime(): this {
-    this.lastTerm = File.MODIFIED_TIME
-
-    return this
-  }
-
-  createdTime(): this {
-    this.lastTerm = File.CREATED_TIME
-
+    this.addQuery(QueryType.BOOLEAN, {
+      field: File.TRASHED,
+      op: Operator.EQUAL,
+      entry: [`${value}`]
+    })
     return this
   }
 

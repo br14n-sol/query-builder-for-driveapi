@@ -1,4 +1,5 @@
 export enum Operator {
+  CONTAINS = 'contains',
   EQUAL = '=',
   IN = 'in',
   AND = 'and',

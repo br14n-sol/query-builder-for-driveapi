@@ -86,7 +86,7 @@ class QueryBuilder {
   getByContent(value: string | string[]): this {
     this.addQuery(QueryType.STRING, {
       field: File.FULL_TEXT,
-      op: Operator.EQUAL,
+      op: Operator.CONTAINS,
       entry: Array.isArray(value) ? value : [value]
     })
     return this

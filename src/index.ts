@@ -1,4 +1,11 @@
-import { Collection, File, Operator, QueryType } from './constants.js'
+import {
+  Collection,
+  File,
+  FileType,
+  Operator,
+  QueryType,
+  VisibilityLevel
+} from './constants.js'
 
 type QueryTemplateOptions = {
   field: File | Collection
@@ -85,7 +92,7 @@ class QueryBuilder {
     return this
   }
 
-  getByFileType(filetype: string | string[]): this {
+  getByFileType(filetype: string | FileType | (string | FileType)[]): this {
     this.addQuery(QueryType.STRING, {
       field: File.MIME_TYPE,
       op: Operator.EQUAL,
@@ -112,7 +119,7 @@ class QueryBuilder {
     return this
   }
 
-  getByVisibility(visibilityLevel: string | string[]): this {
+  getByVisibility(visibilityLevel: VisibilityLevel | VisibilityLevel[]): this {
     this.addQuery(QueryType.STRING, {
       field: File.VISIBILITY,
       op: Operator.EQUAL,
@@ -173,6 +180,6 @@ class QueryBuilder {
   }
 }
 
-export { Collection }
+export { Collection, FileType, VisibilityLevel }
 
 export default QueryBuilder

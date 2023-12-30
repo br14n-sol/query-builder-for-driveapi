@@ -34,6 +34,22 @@ export enum File {
   HIDDEN = 'hidden'
 }
 
+export enum VisibilityLevel {
+  ANYONE_CAN_FIND = 'anyoneCanFind',
+  ANYONE_WITH_LINK = 'anyoneWithLink',
+  DOMAIN_CAN_FIND = 'domainCanFind',
+  DOMAIN_WITH_LINK = 'domainWithLink',
+  LIMITED = 'limited'
+}
+
+export enum FileType {
+  FOLDER = 'application/vnd.google-apps.folder',
+  DOCUMENT = 'application/vnd.google-apps.document',
+  SPREADSHEET = 'application/vnd.google-apps.spreadsheet',
+  PRESENTATION = 'application/vnd.google-apps.presentation',
+  FORM = 'application/vnd.google-apps.form'
+}
+
 export enum QueryType {
   COLLECTION = 0,
   STRING = 1,

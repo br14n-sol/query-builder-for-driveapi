@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.0.1](https://github.com/br14n-sol/query-builder-for-driveapi/compare/v2.0.0...v2.0.1) (2023-12-30)
+
+
+### Bug Fixes
+
+* broken CJS build ([5dd657c](https://github.com/br14n-sol/query-builder-for-driveapi/commit/5dd657c0bc248352b4ba7544bc0c4beac325f358))
+
 ## [2.0.0](https://github.com/br14n-sol/query-builder-for-driveapi/compare/v1.1.0...v2.0.0) (2023-12-30)
 
 

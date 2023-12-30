@@ -1,5 +1,32 @@
 # Changelog
 
+## [2.0.0](https://github.com/br14n-sol/query-builder-for-driveapi/compare/v1.1.0...v2.0.0) (2023-12-30)
+
+
+### ⚠ BREAKING CHANGES
+
+* replace existing methods with improved alternatives
+* remove some methods
+
+### Features
+
+* add `FileType` and `VisibilityLevel` enums ([2b0faf6](https://github.com/br14n-sol/query-builder-for-driveapi/commit/2b0faf6452b2e9546dad1b7a63ed8fdb03c6612a))
+* add support for `properties` and `appProperties` ([265f4a3](https://github.com/br14n-sol/query-builder-for-driveapi/commit/265f4a3594a4611627783afe5dd935d822f65831))
+* add support for `starred` and `hidden` ([56fd889](https://github.com/br14n-sol/query-builder-for-driveapi/commit/56fd8892b8b74d90b37e67f58d7354e7333e6911))
+* add support for `visibilityLevel` ([e44076f](https://github.com/br14n-sol/query-builder-for-driveapi/commit/e44076f9a71d7adb8c8e197b9afef1b3c98dc4c4))
+
+
+### Bug Fixes
+
+* **enum:** update value in `File` enum for `visibility` ([495f057](https://github.com/br14n-sol/query-builder-for-driveapi/commit/495f05709d4c98a1fa8e87842cc31aa5366651e8))
+* operator of `getByContent` ([18222a5](https://github.com/br14n-sol/query-builder-for-driveapi/commit/18222a5d2887df4a383bc3b44db929650a81b99c))
+
+
+### Code Refactoring
+
+* remove some methods ([dfeca01](https://github.com/br14n-sol/query-builder-for-driveapi/commit/dfeca01e8d18973cee3ee08c63dc7ae7d1433484))
+* replace existing methods with improved alternatives ([d8af3f7](https://github.com/br14n-sol/query-builder-for-driveapi/commit/d8af3f70c2e4bf05f2e6b8211167f7871638ba7c))
+
 ## [1.1.0](https://github.com/br14n-sol/query-builder-for-driveapi/compare/v1.0.1...v1.1.0) (2023-11-29)
 
 

@@ -29,7 +29,9 @@ export enum File {
   VISIBILITY = 'visibilityLevel',
   PROPERTIES = 'properties',
   APP_PROPERTIES = 'appProperties',
-  TRASHED = 'trashed'
+  TRASHED = 'trashed',
+  STARRED = 'starred',
+  HIDDEN = 'hidden'
 }
 
 export enum QueryType {

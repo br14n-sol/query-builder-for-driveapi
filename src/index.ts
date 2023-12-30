@@ -150,6 +150,24 @@ class QueryBuilder {
     return this
   }
 
+  isStarred(value: boolean): this {
+    this.addQuery(QueryType.BOOLEAN, {
+      field: File.STARRED,
+      op: Operator.EQUAL,
+      entry: [`${value}`]
+    })
+    return this
+  }
+
+  isHidden(value: boolean): this {
+    this.addQuery(QueryType.BOOLEAN, {
+      field: File.HIDDEN,
+      op: Operator.EQUAL,
+      entry: [`${value}`]
+    })
+    return this
+  }
+
   build(): string {
     return this.queries.join(` ${Operator.AND} `)
   }

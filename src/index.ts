@@ -1,54 +1,44 @@
-enum Operator {
-  CONTAINS = 'contains',
-  EQUAL = '=',
-  UNEQUAL = '!=',
-  LESS_THAN = '<',
-  LESS_THAN_OR_EQUAL = '<=',
-  GREATER_THAN = '>',
-  GREATER_THAN_OR_EQUAL = '>=',
-  IN = 'in',
-  AND = 'and',
-  OR = 'or',
-  NOT = 'not',
-  HAS = 'has'
-}
+import {
+  Collection,
+  File,
+  FileType,
+  Operator,
+  QueryType,
+  VisibilityLevel
+} from './constants.js'
 
-export enum Collection {
-  PARENTS = 'parents',
-  OWNERS = 'owners',
-  WRITERS = 'writers',
-  READERS = 'readers'
+type QueryTemplateOptions = {
+  field: File | Collection
+  op: Operator
+  entry: {
+    key?: string
+    value: unknown
+  }
 }
-
-enum File {
-  NAME = 'name',
-  FULL_TEXT = 'fullText',
-  MIME_TYPE = 'mimeType',
-  MODIFIED_TIME = 'modifiedTime',
-  CREATED_TIME = 'createdTime',
-  TRASHED = 'trashed'
-}
-
-enum QueryType {
-  COLLECTION,
-  STRING,
-  BOOLEAN
-}
-
-type QueryTerm = Collection | File
 
 const QueryTemplate = {
-  [QueryType.COLLECTION]: (value: string, operator: Operator, collection: QueryTerm) => `'${value}' ${operator} ${collection}`,
-  [QueryType.STRING]: (value: string, operator: Operator, term: QueryTerm) => `${term} ${operator} '${value}'`,
-  [QueryType.BOOLEAN]: (value: string, operator: Operator, term: QueryTerm) => `${term} ${operator} ${value}`
+  [QueryType.COLLECTION]: ({ field, op, entry }: QueryTemplateOptions) =>
+    `'${entry.value}' ${op} ${field}`,
+  [QueryType.STRING]: ({ field, op, entry }: QueryTemplateOptions) =>
+    `${field} ${op} '${entry.value}'`,
+  [QueryType.BOOLEAN]: ({ field, op, entry }: QueryTemplateOptions) =>
+    `${field} ${op} ${entry.value}`,
+  [QueryType.HASH]: ({ field, op, entry }: QueryTemplateOptions) =>
+    `${field} ${op} { key='${entry?.key}' and value='${entry.value}' }`
+}
+
+type AddQueryOpts = {
+  field: File | Collection
+  op: Operator
+  entry: Record<string, unknown> | string[]
 }
 
 class QueryBuilder {
   private readonly queries: string[] = []
-  private negateNextTerm: boolean = false
-  private lastTerm: QueryTerm = Collection.PARENTS
+  private negateNextTerm = false
 
-  private addQuery (type: QueryType, operator: Operator, values: string | string[]): void {
+  private addQuery(type: QueryType, options: AddQueryOpts): void {
+    const { field, op, entry } = options
     let query = ''
 
     if (this.negateNextTerm) {
@@ -56,118 +46,189 @@ class QueryBuilder {
       query += `${Operator.NOT} `
     }
 
-    if (typeof values === 'string') {
-      query += QueryTemplate[type](values, operator, this.lastTerm)
+    const _queries = []
+    for (const key in entry) {
+      const value = entry[key as keyof typeof entry]
+      _queries.push(
+        QueryTemplate[type]({ field, op, entry: { key: `${key}`, value } })
+      )
     }
 
-    if (Array.isArray(values)) {
-      query += `(${
-        values.map(v => QueryTemplate[type](v, operator, this.lastTerm)).join(` ${Operator.OR} `)
-      })`
-    }
-
+    query += `(${_queries.join(
+      ` ${Array.isArray(entry) ? Operator.OR : Operator.AND} `
+    )})`
     this.queries.push(query)
   }
 
-  // Comparison methods (query operators)
-
-  not (): this {
+  /**
+   * Negate the immediately following input (query).
+   */
+  not(): this {
     this.negateNextTerm = true
-
     return this
   }
 
-  contains (value: string): this {
-    this.addQuery(QueryType.STRING, Operator.CONTAINS, value)
-
+  /**
+   * Indicates whether the collection contains the specified value.
+   */
+  getByCollection(collection: Collection, value: string | string[]): this {
+    this.addQuery(QueryType.COLLECTION, {
+      field: collection,
+      op: Operator.IN,
+      entry: Array.isArray(value) ? value : [value]
+    })
     return this
   }
 
-  isEqualTo (value: string): this {
-    this.addQuery(QueryType.STRING, Operator.EQUAL, value)
-
+  /**
+   * Indicates whether the file name is equal to the specified file name.
+   */
+  getByFileName(filename: string | string[]): this {
+    this.addQuery(QueryType.STRING, {
+      field: File.NAME,
+      op: Operator.EQUAL,
+      entry: Array.isArray(filename) ? filename : [filename]
+    })
     return this
   }
 
-  isNotEqualTo (value: string): this {
-    this.addQuery(QueryType.STRING, Operator.UNEQUAL, value)
-
+  /**
+   * Indicates whether the file name, description, indexableText or
+   * content text properties or metadata of the file contains the specified value.
+   */
+  getByContent(value: string | string[]): this {
+    this.addQuery(QueryType.STRING, {
+      field: File.FULL_TEXT,
+      op: Operator.CONTAINS,
+      entry: Array.isArray(value) ? value : [value]
+    })
     return this
   }
 
-  isLessThan (value: string): this {
-    this.addQuery(QueryType.STRING, Operator.LESS_THAN, value)
-
+  /**
+   * Indicates whether the MIME type of the file is equal to the specified file type.
+   */
+  getByFileType(filetype: string | FileType | (string | FileType)[]): this {
+    this.addQuery(QueryType.STRING, {
+      field: File.MIME_TYPE,
+      op: Operator.EQUAL,
+      entry: Array.isArray(filetype) ? filetype : [filetype]
+    })
     return this
   }
 
-  isLessThanOrEqualTo (value: string): this {
-    this.addQuery(QueryType.STRING, Operator.LESS_THAN_OR_EQUAL, value)
-
+  /**
+   * Indicates whether the creation date of the file is equal to the specified timestamp.
+   *
+   * Uses RFC 3339 format, the default timezone is UTC, such as 2011-10-05T14:48:00Z.
+   */
+  getByCreatedAt(timestamp: string | string[]): this {
+    this.addQuery(QueryType.STRING, {
+      field: File.CREATED_TIME,
+      op: Operator.EQUAL,
+      entry: Array.isArray(timestamp) ? timestamp : [timestamp]
+    })
     return this
   }
 
-  isGreaterThan (value: string): this {
-    this.addQuery(QueryType.STRING, Operator.GREATER_THAN, value)
-
+  /**
+   * Indicates whether the modified date of the file is equal to the specified timestamp.
+   *
+   * Uses RFC 3339 format, the default timezone is UTC, such as 2011-10-05T14:48:00Z.
+   */
+  getByUpdatedAt(timestamp: string | string[]): this {
+    this.addQuery(QueryType.STRING, {
+      field: File.MODIFIED_TIME,
+      op: Operator.EQUAL,
+      entry: Array.isArray(timestamp) ? timestamp : [timestamp]
+    })
     return this
   }
 
-  isGreaterThanOrEqualTo (value: string): this {
-    this.addQuery(QueryType.STRING, Operator.GREATER_THAN_OR_EQUAL, value)
-
+  /**
+   * Indicates whether the visibility level of the file is equal to the specified visibility level.
+   *
+   * Valid values are found in the `VisibilityLevel` enumeration.
+   */
+  getByVisibility(visibilityLevel: VisibilityLevel | VisibilityLevel[]): this {
+    this.addQuery(QueryType.STRING, {
+      field: File.VISIBILITY,
+      op: Operator.EQUAL,
+      entry: Array.isArray(visibilityLevel)
+        ? visibilityLevel
+        : [visibilityLevel]
+    })
     return this
   }
 
-  // Term methods (query terms)
-
-  inCollection (collection: Collection, values: string | string[]): this {
-    this.lastTerm = collection
-    this.addQuery(QueryType.COLLECTION, Operator.IN, values)
-
+  /**
+   * Indicates whether the file has the specified public properties.
+   */
+  getByPublicProp(properties: Record<string, unknown>) {
+    this.addQuery(QueryType.HASH, {
+      field: File.PROPERTIES,
+      op: Operator.HAS,
+      entry: properties
+    })
     return this
   }
 
-  isTrashed (value: boolean): this {
-    this.lastTerm = File.TRASHED
-    this.addQuery(QueryType.BOOLEAN, Operator.EQUAL, `${value}`)
-
+  /**
+   * Indicates whether the file has the specified private properties.
+   */
+  getByPrivateProp(properties: Record<string, unknown>) {
+    this.addQuery(QueryType.HASH, {
+      field: File.APP_PROPERTIES,
+      op: Operator.HAS,
+      entry: properties
+    })
     return this
   }
 
-  name (): this {
-    this.lastTerm = File.NAME
-
+  /**
+   * Indicates whether the file is in the trash or not.
+   */
+  isTrashed(value: boolean): this {
+    this.addQuery(QueryType.BOOLEAN, {
+      field: File.TRASHED,
+      op: Operator.EQUAL,
+      entry: [`${value}`]
+    })
     return this
   }
 
-  fullText (): this {
-    this.lastTerm = File.FULL_TEXT
-
+  /**
+   * Indicates whether the file is starred or not.
+   */
+  isStarred(value: boolean): this {
+    this.addQuery(QueryType.BOOLEAN, {
+      field: File.STARRED,
+      op: Operator.EQUAL,
+      entry: [`${value}`]
+    })
     return this
   }
 
-  mimeType (): this {
-    this.lastTerm = File.MIME_TYPE
-
+  /**
+   * Indicates whether the shared drive is hidden or not.
+   */
+  isHidden(value: boolean): this {
+    this.addQuery(QueryType.BOOLEAN, {
+      field: File.HIDDEN,
+      op: Operator.EQUAL,
+      entry: [`${value}`]
+    })
     return this
   }
 
-  modifiedTime (): this {
-    this.lastTerm = File.MODIFIED_TIME
-
-    return this
-  }
-
-  createdTime (): this {
-    this.lastTerm = File.CREATED_TIME
-
-    return this
-  }
-
-  build (): string {
+  /**
+   * Joins the inputs into a single string with the `and` operator.
+   */
+  build(): string {
     return this.queries.join(` ${Operator.AND} `)
   }
 }
+
+export { Collection, FileType, VisibilityLevel }
 
 export default QueryBuilder

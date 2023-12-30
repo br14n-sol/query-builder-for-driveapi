@@ -60,11 +60,17 @@ class QueryBuilder {
     this.queries.push(query)
   }
 
+  /**
+   * Negate the immediately following input (query).
+   */
   not(): this {
     this.negateNextTerm = true
     return this
   }
 
+  /**
+   * Indicates whether the collection contains the specified value.
+   */
   getByCollection(collection: Collection, value: string | string[]): this {
     this.addQuery(QueryType.COLLECTION, {
       field: collection,
@@ -74,6 +80,9 @@ class QueryBuilder {
     return this
   }
 
+  /**
+   * Indicates whether the file name is equal to the specified file name.
+   */
   getByFileName(filename: string | string[]): this {
     this.addQuery(QueryType.STRING, {
       field: File.NAME,
@@ -83,6 +92,10 @@ class QueryBuilder {
     return this
   }
 
+  /**
+   * Indicates whether the file name, description, indexableText or
+   * content text properties or metadata of the file contains the specified value.
+   */
   getByContent(value: string | string[]): this {
     this.addQuery(QueryType.STRING, {
       field: File.FULL_TEXT,
@@ -92,6 +105,9 @@ class QueryBuilder {
     return this
   }
 
+  /**
+   * Indicates whether the MIME type of the file is equal to the specified file type.
+   */
   getByFileType(filetype: string | FileType | (string | FileType)[]): this {
     this.addQuery(QueryType.STRING, {
       field: File.MIME_TYPE,
@@ -101,6 +117,11 @@ class QueryBuilder {
     return this
   }
 
+  /**
+   * Indicates whether the creation date of the file is equal to the specified timestamp.
+   *
+   * Uses RFC 3339 format, the default timezone is UTC, such as 2011-10-05T14:48:00Z.
+   */
   getByCreatedAt(timestamp: string | string[]): this {
     this.addQuery(QueryType.STRING, {
       field: File.CREATED_TIME,
@@ -110,6 +131,11 @@ class QueryBuilder {
     return this
   }
 
+  /**
+   * Indicates whether the modified date of the file is equal to the specified timestamp.
+   *
+   * Uses RFC 3339 format, the default timezone is UTC, such as 2011-10-05T14:48:00Z.
+   */
   getByUpdatedAt(timestamp: string | string[]): this {
     this.addQuery(QueryType.STRING, {
       field: File.MODIFIED_TIME,
@@ -119,6 +145,11 @@ class QueryBuilder {
     return this
   }
 
+  /**
+   * Indicates whether the visibility level of the file is equal to the specified visibility level.
+   *
+   * Valid values are found in the `VisibilityLevel` enumeration.
+   */
   getByVisibility(visibilityLevel: VisibilityLevel | VisibilityLevel[]): this {
     this.addQuery(QueryType.STRING, {
       field: File.VISIBILITY,
@@ -130,6 +161,9 @@ class QueryBuilder {
     return this
   }
 
+  /**
+   * Indicates whether the file has the specified public properties.
+   */
   getByPublicProp(properties: Record<string, unknown>) {
     this.addQuery(QueryType.HASH, {
       field: File.PROPERTIES,
@@ -139,6 +173,9 @@ class QueryBuilder {
     return this
   }
 
+  /**
+   * Indicates whether the file has the specified private properties.
+   */
   getByPrivateProp(properties: Record<string, unknown>) {
     this.addQuery(QueryType.HASH, {
       field: File.APP_PROPERTIES,
@@ -148,6 +185,9 @@ class QueryBuilder {
     return this
   }
 
+  /**
+   * Indicates whether the file is in the trash or not.
+   */
   isTrashed(value: boolean): this {
     this.addQuery(QueryType.BOOLEAN, {
       field: File.TRASHED,
@@ -157,6 +197,9 @@ class QueryBuilder {
     return this
   }
 
+  /**
+   * Indicates whether the file is starred or not.
+   */
   isStarred(value: boolean): this {
     this.addQuery(QueryType.BOOLEAN, {
       field: File.STARRED,
@@ -166,6 +209,9 @@ class QueryBuilder {
     return this
   }
 
+  /**
+   * Indicates whether the shared drive is hidden or not.
+   */
   isHidden(value: boolean): this {
     this.addQuery(QueryType.BOOLEAN, {
       field: File.HIDDEN,
@@ -175,6 +221,9 @@ class QueryBuilder {
     return this
   }
 
+  /**
+   * Joins the inputs into a single string with the `and` operator.
+   */
   build(): string {
     return this.queries.join(` ${Operator.AND} `)
   }

@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.0.2](https://github.com/br14n-sol/query-builder-for-driveapi/compare/v2.0.1...v2.0.2) (2023-12-31)
+
+
+### Bug Fixes
+
+* cjs output exports ([d6877a2](https://github.com/br14n-sol/query-builder-for-driveapi/commit/d6877a2c6d6c59cb090d4b5511fb881a1d0d16d0))
+* escape quotes in inputs ([68db58e](https://github.com/br14n-sol/query-builder-for-driveapi/commit/68db58e569f1878ee5ba9de69859ff35139004a0))
+
 ## [2.0.1](https://github.com/br14n-sol/query-builder-for-driveapi/compare/v2.0.0...v2.0.1) (2023-12-30)
 
 

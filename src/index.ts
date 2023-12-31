@@ -7,6 +7,10 @@ import {
   VisibilityLevel
 } from './constants.js'
 
+function _escape(input: unknown) {
+  return String(input).replace(/'/g, "\\'")
+}
+
 type QueryTemplateOptions = {
   field: File | Collection
   op: Operator
@@ -18,13 +22,13 @@ type QueryTemplateOptions = {
 
 const QueryTemplate = {
   [QueryType.COLLECTION]: ({ field, op, entry }: QueryTemplateOptions) =>
-    `'${entry.value}' ${op} ${field}`,
+    `'${_escape(entry.value)}' ${op} ${field}`,
   [QueryType.STRING]: ({ field, op, entry }: QueryTemplateOptions) =>
-    `${field} ${op} '${entry.value}'`,
+    `${field} ${op} '${_escape(entry.value)}'`,
   [QueryType.BOOLEAN]: ({ field, op, entry }: QueryTemplateOptions) =>
     `${field} ${op} ${entry.value}`,
   [QueryType.HASH]: ({ field, op, entry }: QueryTemplateOptions) =>
-    `${field} ${op} { key='${entry?.key}' and value='${entry.value}' }`
+    `${field} ${op} { key='${entry?.key}' and value='${_escape(entry.value)}' }`
 }
 
 type AddQueryOpts = {

@@ -13,6 +13,5 @@
   "clean": true,
   "platform": "node",
   "bundle": true,
-  "tsconfig": "./tsconfig.json",
-  "minify": true
+  "tsconfig": "./tsconfig.json"
 }

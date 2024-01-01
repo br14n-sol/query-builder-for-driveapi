@@ -35,7 +35,6 @@
     "@biomejs/biome": "^1.4.1",
     "@commitlint/cli": "^18.4.3",
     "@commitlint/config-conventional": "^18.4.3",
-    "fix-tsup-cjs": "^1.2.0",
     "husky": "^8.0.3",
     "lint-staged": "^15.2.0",
     "terser": "^5.26.0",

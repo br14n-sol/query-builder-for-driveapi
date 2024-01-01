@@ -333,7 +333,7 @@ qb.build()
 
 ## Copyright & License
 
-© 2023 - [Brian Fernandez](https://github.com/br14n-sol)
+© 2023-2024 [Brian Fernandez](https://github.com/br14n-sol)
 
 This project is licensed under the MIT license. See the file [LICENSE](LICENSE) for details.
 

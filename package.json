@@ -21,7 +21,7 @@
     "./lib"
   ],
   "scripts": {
-    "prepare": "husky install",
+    "prepare": "husky",
     "lint": "biome lint ./src",
     "lint:fix": "biome check --apply ./src",
     "prebuild": "npm run lint",

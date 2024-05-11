@@ -10,32 +10,37 @@ const { outDir } = (
   })
 ).default
 const currentDir = process.cwd()
-const fixDir = path.resolve(currentDir, outDir)
+const outDirPath = path.resolve(currentDir, outDir)
 
-await fixCjsExports({ globOptions: { cwd: fixDir } })
-await fixCjsDts({ globOptions: { cwd: fixDir } })
+await fixCjsExports({ globOptions: { cwd: outDirPath } })
+await fixCjsDts({ globOptions: { cwd: outDirPath } })
 
-const fixFiles = await fs.readdir(fixDir)
-for (const file of fixFiles) {
-  if (/^.+\.(js|cjs)$/.test(file)) {
-    const filePath = path.resolve(fixDir, file)
-    const { size: oldSize } = await fs.stat(filePath)
+const filesToMinify = (
+  await fs.readdir(outDirPath)
+).filter(fileName => /^.+\.(js|cjs)$/.test(fileName))
 
-    const code = await fs.readFile(filePath, 'utf-8')
-    const result = await minify(code)
+for (const fileName of filesToMinify) {
+  const filePath = path.resolve(outDirPath, fileName)
+  const fileContent = await fs.readFile(filePath, 'utf-8')
+  const minifiedFileContent = (await minify(fileContent)).code
 
-    await fs.writeFile(filePath, result.code ?? '')
+  if (minifiedFileContent) {
+    await fs.writeFile(filePath, minifiedFileContent)
 
-    const { size: newSize } = await fs.stat(filePath)
-
-    console.log(
-      '[minify]',
-      path.join(outDir, file),
-      formatBytes(oldSize),
+    logger(
+      'minify',
+      path.join(outDir, fileName),
+      formatBytes(Buffer.byteLength(fileContent)),
       '➡',
-      formatBytes(newSize)
+      formatBytes(Buffer.byteLength(minifiedFileContent))
     )
+  } else {
+    logger('minify', path.join(outDir, fileName), '❌')
   }
+}
+
+function logger(prefix, ...messages) {
+  console.log(`[${prefix}]`, ...messages)
 }
 
 function formatBytes(bytes) {

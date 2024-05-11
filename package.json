@@ -26,7 +26,7 @@
     "lint:fix": "biome check --apply ./src",
     "prebuild": "npm run lint",
     "build": "tsup --config tsup.config.json",
-    "postbuild": "node --no-warnings=ExperimentalWarning fix-cjs-output.js"
+    "postbuild": "node fix-cjs-output.js"
   },
   "lint-staged": {
     "*.ts": "npm run lint:fix"

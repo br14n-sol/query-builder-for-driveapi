@@ -6,12 +6,12 @@
   ],
   "outDir": "./lib",
   "format": [
-    "esm",
-    "cjs"
+    "esm"
   ],
   "dts": true,
   "clean": true,
   "platform": "node",
   "bundle": true,
+  "minify": true,
   "tsconfig": "./tsconfig.json"
 }

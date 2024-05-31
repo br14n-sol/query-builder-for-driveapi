@@ -37,10 +37,10 @@
     "@commitlint/config-conventional": "^19.2.2",
     "fix-tsup-cjs": "^1.2.0",
     "husky": "^9.0.11",
-    "lint-staged": "^15.2.2",
+    "lint-staged": "^15.2.5",
     "terser": "^5.31.0",
     "tsup": "^8.0.2",
-    "typescript": "^5.4.5"
+    "typescript": "^5.2.2"
   },
   "engines": {
     "node": ">=18.20.2"

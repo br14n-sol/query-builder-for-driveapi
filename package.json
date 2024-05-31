@@ -21,7 +21,8 @@
     "lint": "biome lint ./src",
     "lint:fix": "biome check --apply ./src",
     "prebuild": "npm run lint",
-    "build": "tsup --config tsup.config.json"
+    "build": "tsup --config tsup.config.json",
+    "docs": "typedoc --options typedoc.json"
   },
   "lint-staged": {
     "*.ts": "npm run lint:fix"
@@ -33,6 +34,7 @@
     "husky": "^9.0.11",
     "lint-staged": "^15.2.5",
     "tsup": "^8.0.2",
+    "typedoc": "^0.25.13",
     "typescript": "^5.2.2"
   },
   "engines": {

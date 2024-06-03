@@ -2,5 +2,9 @@
   "$schema": "https://typedoc.org/schema.json",
   "entryPoints": ["src/index.ts"],
   "out": "docs",
-  "includeVersion": true
+  "navigationLinks": {
+    "GitHub": "https://github.com/br14n-sol/query-builder-for-driveapi"
+  },
+  "readme": "none",
+  "tsconfig": "./tsconfig.json"
 }

@@ -7,12 +7,6 @@
   "type": "module",
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
-  "exports": {
-    "import": {
-      "types": "./lib/index.d.ts",
-      "default": "./lib/index.js"
-    }
-  },
   "files": [
     "./lib"
   ],

@@ -13,7 +13,7 @@
   "scripts": {
     "prepare": "husky",
     "lint": "biome lint ./src",
-    "lint:fix": "biome check --apply ./src",
+    "lint:fix": "biome check --write ./src",
     "prebuild": "npm run lint",
     "build": "tsup --config tsup.config.json",
     "docs": "typedoc --options typedoc.json"
@@ -22,7 +22,7 @@
     "*.ts": "npm run lint:fix"
   },
   "devDependencies": {
-    "@biomejs/biome": "^1.7.3",
+    "@biomejs/biome": "^1.8.0",
     "@commitlint/cli": "^19.3.0",
     "@commitlint/config-conventional": "^19.2.2",
     "husky": "^9.0.11",

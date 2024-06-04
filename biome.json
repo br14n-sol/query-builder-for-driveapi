@@ -6,7 +6,7 @@
       "indentWidth": 2,
       "semicolons": "asNeeded",
       "quoteStyle": "single",
-      "trailingComma": "none",
+			"trailingCommas": "none",
       "arrowParentheses": "asNeeded"
     }
   },

@@ -6,16 +6,8 @@ import {
   QueryType,
   type VisibilityLevel
 } from './enums.js'
+import type { AddQueryOpts, QueryTemplateOptions } from './types.js'
 import * as utils from './utils.js'
-
-type QueryTemplateOptions = {
-  field: File | Collection
-  op: Operator
-  entry: {
-    key?: string
-    value: unknown
-  }
-}
 
 const QueryTemplate = {
   [QueryType.COLLECTION]: ({ field, op, entry }: QueryTemplateOptions) =>
@@ -26,12 +18,6 @@ const QueryTemplate = {
     `${field} ${op} ${entry.value}`,
   [QueryType.HASH]: ({ field, op, entry }: QueryTemplateOptions) =>
     `${field} ${op} { key='${entry?.key}' and value='${utils.escapeSingleQuotes(String(entry.value))}' }`
-}
-
-type AddQueryOpts = {
-  field: File | Collection
-  op: Operator
-  entry: Record<string, unknown> | string[]
 }
 
 class QueryBuilder {

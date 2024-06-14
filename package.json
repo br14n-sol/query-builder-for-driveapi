@@ -1,53 +1,52 @@
 {
-  "name": "query-builder-for-driveapi",
-  "author": "Brian Fernandez",
-  "description": "Easily generate queries for the Google Drive API.",
-  "version": "2.0.2",
-  "license": "MIT",
-  "type": "module",
-  "main": "./lib/index.js",
-  "types": "./lib/index.d.ts",
-  "files": [
-    "./lib"
-  ],
-  "scripts": {
-    "prepare": "husky",
-    "lint": "biome lint ./src",
-    "lint:fix": "biome check --write ./src",
-    "prebuild": "npm run lint",
-    "build": "tsup --config tsup.config.json",
-    "docs": "typedoc --options typedoc.json"
-  },
-  "lint-staged": {
-    "*.ts": "npm run lint:fix"
-  },
-  "devDependencies": {
-    "@biomejs/biome": "^1.8.1",
-    "@commitlint/cli": "^19.3.0",
-    "@commitlint/config-conventional": "^19.2.2",
-    "husky": "^9.0.11",
+	"name": "query-builder-for-driveapi",
+	"author": "Brian Fernandez",
+	"description": "Easily generate queries for the Google Drive API.",
+	"version": "2.0.2",
+	"license": "MIT",
+	"type": "module",
+	"main": "./lib/index.js",
+	"types": "./lib/index.d.ts",
+	"files": [
+		"./lib"
+	],
+	"scripts": {
+		"prepare": "husky",
+		"lint": "biome lint ./src",
+		"lint:fix": "biome check --write ./src",
+		"prebuild": "npm run lint",
+		"build": "tsup --config tsup.config.json",
+		"docs": "typedoc --options typedoc.json"
+	},
+	"lint-staged": {
+		"*.ts": "npm run lint:fix"
+	},
+	"devDependencies": {
+		"@biomejs/biome": "^1.8.1",
+		"@commitlint/cli": "^19.3.0",
+		"@commitlint/config-conventional": "^19.2.2",
+		"husky": "^9.0.11",
 		"lint-staged": "^15.2.7",
-    "tsup": "^8.1.0",
-    "typedoc": "^0.25.13",
-    "typescript": "^5.2.2"
-  },
-  "engines": {
-    "node": ">=18.20.2"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/br14n-sol/Query-Builder-for-DriveAPI.git"
-  },
-  "bugs": {
-    "url": "https://github.com/br14n-sol/Query-Builder-for-DriveAPI/issues"
-  },
-  "homepage": "https://github.com/br14n-sol/Query-Builder-for-DriveAPI#readme",
-  "keywords": [
-    "drive",
-    "driveapi",
-    "google",
-    "googleapis",
-    "query",
-    "query builder"
-  ]
+		"tsup": "^8.1.0",
+		"typescript": "^5.2.2"
+	},
+	"engines": {
+		"node": ">=18.20.2"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/br14n-sol/Query-Builder-for-DriveAPI.git"
+	},
+	"bugs": {
+		"url": "https://github.com/br14n-sol/Query-Builder-for-DriveAPI/issues"
+	},
+	"homepage": "https://github.com/br14n-sol/Query-Builder-for-DriveAPI#readme",
+	"keywords": [
+		"drive",
+		"driveapi",
+		"google",
+		"googleapis",
+		"query",
+		"query builder"
+	]
 }

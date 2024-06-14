@@ -6,10 +6,7 @@ import {
   QueryType,
   type VisibilityLevel
 } from './enums.js'
-
-function _escape(input: unknown) {
-  return String(input).replace(/'/g, "\\'")
-}
+import * as utils from './utils.js'
 
 type QueryTemplateOptions = {
   field: File | Collection
@@ -22,13 +19,13 @@ type QueryTemplateOptions = {
 
 const QueryTemplate = {
   [QueryType.COLLECTION]: ({ field, op, entry }: QueryTemplateOptions) =>
-    `'${_escape(entry.value)}' ${op} ${field}`,
+    `'${utils._escape(entry.value)}' ${op} ${field}`,
   [QueryType.STRING]: ({ field, op, entry }: QueryTemplateOptions) =>
-    `${field} ${op} '${_escape(entry.value)}'`,
+    `${field} ${op} '${utils._escape(entry.value)}'`,
   [QueryType.BOOLEAN]: ({ field, op, entry }: QueryTemplateOptions) =>
     `${field} ${op} ${entry.value}`,
   [QueryType.HASH]: ({ field, op, entry }: QueryTemplateOptions) =>
-    `${field} ${op} { key='${entry?.key}' and value='${_escape(entry.value)}' }`
+    `${field} ${op} { key='${entry?.key}' and value='${utils._escape(entry.value)}' }`
 }
 
 type AddQueryOpts = {

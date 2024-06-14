@@ -19,13 +19,13 @@ type QueryTemplateOptions = {
 
 const QueryTemplate = {
   [QueryType.COLLECTION]: ({ field, op, entry }: QueryTemplateOptions) =>
-    `'${utils._escape(entry.value)}' ${op} ${field}`,
+    `'${utils.escapeSingleQuotes(String(entry.value))}' ${op} ${field}`,
   [QueryType.STRING]: ({ field, op, entry }: QueryTemplateOptions) =>
-    `${field} ${op} '${utils._escape(entry.value)}'`,
+    `${field} ${op} '${utils.escapeSingleQuotes(String(entry.value))}'`,
   [QueryType.BOOLEAN]: ({ field, op, entry }: QueryTemplateOptions) =>
     `${field} ${op} ${entry.value}`,
   [QueryType.HASH]: ({ field, op, entry }: QueryTemplateOptions) =>
-    `${field} ${op} { key='${entry?.key}' and value='${utils._escape(entry.value)}' }`
+    `${field} ${op} { key='${entry?.key}' and value='${utils.escapeSingleQuotes(String(entry.value))}' }`
 }
 
 type AddQueryOpts = {

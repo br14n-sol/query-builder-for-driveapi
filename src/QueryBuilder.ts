@@ -5,7 +5,7 @@ import {
   Operator,
   QueryType,
   type VisibilityLevel
-} from './constants.js'
+} from './enums.js'
 
 function _escape(input: unknown) {
   return String(input).replace(/'/g, "\\'")

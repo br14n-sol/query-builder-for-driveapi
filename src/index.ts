@@ -1,5 +1,5 @@
 import QueryBuilder from './QueryBuilder.js'
-import { Collection, FileType, VisibilityLevel } from './constants.js'
+import { Collection, FileType, VisibilityLevel } from './enums.js'
 
 export { Collection, FileType, VisibilityLevel }
 

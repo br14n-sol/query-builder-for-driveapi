@@ -7,16 +7,13 @@
 	"type": "module",
 	"main": "./lib/index.js",
 	"types": "./lib/index.d.ts",
-	"files": [
-		"./lib"
-	],
+	"files": ["./lib"],
 	"scripts": {
 		"prepare": "husky",
 		"lint": "biome lint ./src",
 		"lint:fix": "biome check --write ./src",
 		"prebuild": "npm run lint",
-		"build": "tsup --config tsup.config.json",
-		"docs": "typedoc --options typedoc.json"
+		"build": "tsup --config tsup.config.json"
 	},
 	"lint-staged": {
 		"*.ts": "npm run lint:fix"

@@ -1,6 +1,6 @@
 import {
   type Collection,
-  File,
+  FileProperty,
   type FileType,
   Operator,
   QueryType,
@@ -17,7 +17,7 @@ const QueryTemplate = {
   [QueryType.BOOLEAN]: ({ field, op, entry }: QueryTemplateOptions) =>
     `${field} ${op} ${entry.value}`,
   [QueryType.HASH]: ({ field, op, entry }: QueryTemplateOptions) =>
-    `${field} ${op} { key='${entry?.key}' and value='${utils.escapeSingleQuotes(String(entry.value))}' }`
+    `${field} ${op} { key='${entry.key}' and value='${utils.escapeSingleQuotes(String(entry.value))}' }`
 }
 
 class QueryBuilder {
@@ -72,7 +72,7 @@ class QueryBuilder {
    */
   getByFileName(filename: string | string[]): this {
     this.addQuery(QueryType.STRING, {
-      field: File.NAME,
+      field: FileProperty.NAME,
       op: Operator.EQUAL,
       entry: Array.isArray(filename) ? filename : [filename]
     })
@@ -85,7 +85,7 @@ class QueryBuilder {
    */
   getByContent(value: string | string[]): this {
     this.addQuery(QueryType.STRING, {
-      field: File.FULL_TEXT,
+      field: FileProperty.FULL_TEXT,
       op: Operator.CONTAINS,
       entry: Array.isArray(value) ? value : [value]
     })
@@ -97,7 +97,7 @@ class QueryBuilder {
    */
   getByFileType(filetype: string | FileType | (string | FileType)[]): this {
     this.addQuery(QueryType.STRING, {
-      field: File.MIME_TYPE,
+      field: FileProperty.MIME_TYPE,
       op: Operator.EQUAL,
       entry: Array.isArray(filetype) ? filetype : [filetype]
     })
@@ -111,7 +111,7 @@ class QueryBuilder {
    */
   getByCreatedAt(timestamp: string | string[]): this {
     this.addQuery(QueryType.STRING, {
-      field: File.CREATED_TIME,
+      field: FileProperty.CREATED_TIME,
       op: Operator.EQUAL,
       entry: Array.isArray(timestamp) ? timestamp : [timestamp]
     })
@@ -125,7 +125,7 @@ class QueryBuilder {
    */
   getByUpdatedAt(timestamp: string | string[]): this {
     this.addQuery(QueryType.STRING, {
-      field: File.MODIFIED_TIME,
+      field: FileProperty.MODIFIED_TIME,
       op: Operator.EQUAL,
       entry: Array.isArray(timestamp) ? timestamp : [timestamp]
     })
@@ -139,7 +139,7 @@ class QueryBuilder {
    */
   getByVisibility(visibilityLevel: VisibilityLevel | VisibilityLevel[]): this {
     this.addQuery(QueryType.STRING, {
-      field: File.VISIBILITY,
+      field: FileProperty.VISIBILITY,
       op: Operator.EQUAL,
       entry: Array.isArray(visibilityLevel)
         ? visibilityLevel
@@ -153,7 +153,7 @@ class QueryBuilder {
    */
   getByPublicProp(properties: Record<string, unknown>) {
     this.addQuery(QueryType.HASH, {
-      field: File.PROPERTIES,
+      field: FileProperty.PROPERTIES,
       op: Operator.HAS,
       entry: properties
     })
@@ -165,7 +165,7 @@ class QueryBuilder {
    */
   getByPrivateProp(properties: Record<string, unknown>) {
     this.addQuery(QueryType.HASH, {
-      field: File.APP_PROPERTIES,
+      field: FileProperty.APP_PROPERTIES,
       op: Operator.HAS,
       entry: properties
     })
@@ -177,7 +177,7 @@ class QueryBuilder {
    */
   isTrashed(value: boolean): this {
     this.addQuery(QueryType.BOOLEAN, {
-      field: File.TRASHED,
+      field: FileProperty.TRASHED,
       op: Operator.EQUAL,
       entry: [`${value}`]
     })
@@ -189,7 +189,7 @@ class QueryBuilder {
    */
   isStarred(value: boolean): this {
     this.addQuery(QueryType.BOOLEAN, {
-      field: File.STARRED,
+      field: FileProperty.STARRED,
       op: Operator.EQUAL,
       entry: [`${value}`]
     })
@@ -201,7 +201,7 @@ class QueryBuilder {
    */
   isHidden(value: boolean): this {
     this.addQuery(QueryType.BOOLEAN, {
-      field: File.HIDDEN,
+      field: FileProperty.HIDDEN,
       op: Operator.EQUAL,
       entry: [`${value}`]
     })

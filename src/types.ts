@@ -1,16 +1,16 @@
-import type { Collection, File, Operator } from './enums.js'
+import type { Collection, FileProperty, Operator } from './enums.js'
 
 export type QueryTemplateOptions = {
-  field: File | Collection
+  field: FileProperty | Collection
   op: Operator
   entry: {
-    key?: string
+    key: string
     value: unknown
   }
 }
 
 export type AddQueryOpts = {
-  field: File | Collection
+  field: FileProperty | Collection
   op: Operator
   entry: Record<string, unknown> | string[]
 }

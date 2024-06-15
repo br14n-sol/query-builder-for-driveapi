@@ -35,15 +35,15 @@ export enum Collection {
   READERS = 'readers'
 }
 
-export enum File {
+export enum FileProperty {
   NAME = 'name',
   FULL_TEXT = 'fullText',
   MIME_TYPE = 'mimeType',
-  CREATED_TIME = 'createdTime',
-  MODIFIED_TIME = 'modifiedTime',
   VISIBILITY = 'visibility',
   PROPERTIES = 'properties',
   APP_PROPERTIES = 'appProperties',
+  CREATED_TIME = 'createdTime',
+  MODIFIED_TIME = 'modifiedTime',
   TRASHED = 'trashed',
   STARRED = 'starred',
   HIDDEN = 'hidden'

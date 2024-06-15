@@ -1,11 +1,31 @@
 export enum Operator {
   CONTAINS = 'contains',
-  EQUAL = '=',
   IN = 'in',
   AND = 'and',
   OR = 'or',
   NOT = 'not',
-  HAS = 'has'
+  HAS = 'has',
+  EQUAL = '=',
+  NOT_EQUAL = '!=',
+  LESS_THAN = '<',
+  LESS_THAN_OR_EQUAL = '<=',
+  GREATER_THAN = '>',
+  GREATER_THAN_OR_EQUAL = '>='
+}
+
+export enum OperatorKey {
+  CONTAINS = '$contains',
+  IN = '$in',
+  AND = '$and',
+  OR = '$or',
+  NOT = '$not',
+  HAS = '$has',
+  EQUAL = '$eq',
+  NOT_EQUAL = '$ne',
+  LESS_THAN = '$lt',
+  LESS_THAN_OR_EQUAL = '$lte',
+  GREATER_THAN = '$gt',
+  GREATER_THAN_OR_EQUAL = '$gte'
 }
 
 export enum Collection {

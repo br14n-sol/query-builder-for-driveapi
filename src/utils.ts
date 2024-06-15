@@ -1,9 +1,9 @@
 import { Operator, OperatorKey } from './enums.js'
 
 /** Check if value is object. e.g. { a: 1 } => true */
-export function isObject(
+export function isObject<K extends string, V>(
   value: unknown
-): value is Record<PropertyKey, unknown> {
+): value is Record<K, V> {
   return Object.prototype.toString.call(value) === '[object Object]'
 }
 

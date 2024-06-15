@@ -1,217 +1,183 @@
 import {
-  type Collection,
   FileProperty,
-  type FileType,
   Operator,
   QueryType,
   type VisibilityLevel
 } from './enums.js'
-import type { AddQueryOpts, QueryTemplateOptions } from './types.js'
+import type {
+  AddQueryOptions,
+  CollectionMapping,
+  CreatedAtMapping,
+  FileNameMapping,
+  FileTypeMapping,
+  OperatorKeyMapping,
+  UpdatedAtMapping,
+  VisibilityMapping
+} from './types.js'
 import * as utils from './utils.js'
-
-const QueryTemplate = {
-  [QueryType.COLLECTION]: ({ field, op, entry }: QueryTemplateOptions) =>
-    `'${utils.escapeSingleQuotes(String(entry.value))}' ${op} ${field}`,
-  [QueryType.STRING]: ({ field, op, entry }: QueryTemplateOptions) =>
-    `${field} ${op} '${utils.escapeSingleQuotes(String(entry.value))}'`,
-  [QueryType.BOOLEAN]: ({ field, op, entry }: QueryTemplateOptions) =>
-    `${field} ${op} ${entry.value}`,
-  [QueryType.HASH]: ({ field, op, entry }: QueryTemplateOptions) =>
-    `${field} ${op} { key='${entry.key}' and value='${utils.escapeSingleQuotes(String(entry.value))}' }`
-}
 
 class QueryBuilder {
   private readonly queries: string[] = []
-  private negateNextTerm = false
 
-  private addQuery(type: QueryType, options: AddQueryOpts): void {
-    const { field, op, entry } = options
-    let query = ''
+  private addQuery(type: QueryType, options: AddQueryOptions): void {
+    let entries: OperatorKeyMapping | Record<string, unknown | unknown[]> = {}
 
-    if (this.negateNextTerm) {
-      this.negateNextTerm = false
-      query += `${Operator.NOT} `
+    // Handle string and array entries.
+    if (!utils.isObject(options.entry)) {
+      const operatorKey = utils.getOperatorKeyByValue(options.defOperator)
+      entries[operatorKey] = options.entry
+    }
+    // Handle object entries.
+    else {
+      entries = options.entry
     }
 
-    const _queries = []
-    for (const key in entry) {
-      const value = entry[key as keyof typeof entry]
-      _queries.push(
-        QueryTemplate[type]({ field, op, entry: { key: `${key}`, value } })
-      )
-    }
+    // Iterate over entries and generate query.
+    for (const [key, value] of utils.objectEntries(entries)) {
+      const field = options.field
+      // Get operator from key or default operator.
+      // Note: default operator is used when key is not found (HASH query).
+      const operator = utils.getOperatorValueByKey(key) ?? options.defOperator
+      const values = utils.ensureArray(value)
+      // Generate query for each value.
+      const queries = values.map(value => {
+        const opts = { field, operator, entry: { key, value } }
+        return utils.generateQuery(type, opts)
+      })
+      // Join queries with OR operator.
+      // If there is only one query, return it directly.
+      // Otherwise, return parenthesised query.
+      const query =
+        queries.length > 1
+          ? `(${queries.join(` ${Operator.OR} `)})`
+          : queries.at(0) || ''
 
-    query += `(${_queries.join(
-      ` ${Array.isArray(entry) ? Operator.OR : Operator.AND} `
-    )})`
-    this.queries.push(query)
+      this.queries.push(query)
+    }
   }
 
-  /**
-   * Negate the immediately following input (query).
-   */
-  not(): this {
-    this.negateNextTerm = true
+  // TODO: Add alternative to negate query.
+  // TODO: Add support to viewedByMeTime.
+  // TODO: Add support to sharedWithMe.
+  // TODO: Add support to shortcutDetails.targetId.
+  // TODO: Add support to memberCount.
+  // TODO: Add support to organizerCount.
+  // TODO: Add support to orgUnitId.
+
+  collection(collections: CollectionMapping): QueryBuilder {
+    for (const [collection, entries] of utils.objectEntries(collections)) {
+      this.addQuery(QueryType.COLLECTION, {
+        field: collection,
+        defOperator: Operator.IN,
+        entry: entries
+      })
+    }
     return this
   }
 
-  /**
-   * Indicates whether the collection contains the specified value.
-   */
-  getByCollection(collection: Collection, value: string | string[]): this {
-    this.addQuery(QueryType.COLLECTION, {
-      field: collection,
-      op: Operator.IN,
-      entry: Array.isArray(value) ? value : [value]
-    })
-    return this
-  }
-
-  /**
-   * Indicates whether the file name is equal to the specified file name.
-   */
-  getByFileName(filename: string | string[]): this {
+  fileName(names: string | string[] | FileNameMapping): QueryBuilder {
     this.addQuery(QueryType.STRING, {
       field: FileProperty.NAME,
-      op: Operator.EQUAL,
-      entry: Array.isArray(filename) ? filename : [filename]
+      defOperator: Operator.EQUAL,
+      entry: names
     })
     return this
   }
 
-  /**
-   * Indicates whether the file name, description, indexableText or
-   * content text properties or metadata of the file contains the specified value.
-   */
-  getByContent(value: string | string[]): this {
+  content(inputs: string | string[]): QueryBuilder {
     this.addQuery(QueryType.STRING, {
       field: FileProperty.FULL_TEXT,
-      op: Operator.CONTAINS,
-      entry: Array.isArray(value) ? value : [value]
+      defOperator: Operator.CONTAINS,
+      entry: inputs
     })
     return this
   }
 
-  /**
-   * Indicates whether the MIME type of the file is equal to the specified file type.
-   */
-  getByFileType(filetype: string | FileType | (string | FileType)[]): this {
+  fileType(types: string | string[] | FileTypeMapping): QueryBuilder {
     this.addQuery(QueryType.STRING, {
       field: FileProperty.MIME_TYPE,
-      op: Operator.EQUAL,
-      entry: Array.isArray(filetype) ? filetype : [filetype]
+      defOperator: Operator.EQUAL,
+      entry: types
     })
     return this
   }
 
-  /**
-   * Indicates whether the creation date of the file is equal to the specified timestamp.
-   *
-   * Uses RFC 3339 format, the default timezone is UTC, such as 2011-10-05T14:48:00Z.
-   */
-  getByCreatedAt(timestamp: string | string[]): this {
-    this.addQuery(QueryType.STRING, {
-      field: FileProperty.CREATED_TIME,
-      op: Operator.EQUAL,
-      entry: Array.isArray(timestamp) ? timestamp : [timestamp]
-    })
-    return this
-  }
-
-  /**
-   * Indicates whether the modified date of the file is equal to the specified timestamp.
-   *
-   * Uses RFC 3339 format, the default timezone is UTC, such as 2011-10-05T14:48:00Z.
-   */
-  getByUpdatedAt(timestamp: string | string[]): this {
-    this.addQuery(QueryType.STRING, {
-      field: FileProperty.MODIFIED_TIME,
-      op: Operator.EQUAL,
-      entry: Array.isArray(timestamp) ? timestamp : [timestamp]
-    })
-    return this
-  }
-
-  /**
-   * Indicates whether the visibility level of the file is equal to the specified visibility level.
-   *
-   * Valid values are found in the `VisibilityLevel` enumeration.
-   */
-  getByVisibility(visibilityLevel: VisibilityLevel | VisibilityLevel[]): this {
+  visibility(
+    level: VisibilityLevel | VisibilityLevel[] | VisibilityMapping
+  ): QueryBuilder {
     this.addQuery(QueryType.STRING, {
       field: FileProperty.VISIBILITY,
-      op: Operator.EQUAL,
-      entry: Array.isArray(visibilityLevel)
-        ? visibilityLevel
-        : [visibilityLevel]
+      defOperator: Operator.EQUAL,
+      entry: level
     })
     return this
   }
 
-  /**
-   * Indicates whether the file has the specified public properties.
-   */
-  getByPublicProp(properties: Record<string, unknown>) {
+  property(properties: Record<string, unknown | unknown[]>): QueryBuilder {
     this.addQuery(QueryType.HASH, {
       field: FileProperty.PROPERTIES,
-      op: Operator.HAS,
+      defOperator: Operator.HAS,
       entry: properties
     })
     return this
   }
 
-  /**
-   * Indicates whether the file has the specified private properties.
-   */
-  getByPrivateProp(properties: Record<string, unknown>) {
+  appProperty(properties: Record<string, unknown | unknown[]>): QueryBuilder {
     this.addQuery(QueryType.HASH, {
       field: FileProperty.APP_PROPERTIES,
-      op: Operator.HAS,
+      defOperator: Operator.HAS,
       entry: properties
     })
     return this
   }
 
-  /**
-   * Indicates whether the file is in the trash or not.
-   */
-  isTrashed(value: boolean): this {
+  createdAt(dates: string | string[] | CreatedAtMapping): QueryBuilder {
+    this.addQuery(QueryType.STRING, {
+      field: FileProperty.CREATED_TIME,
+      defOperator: Operator.EQUAL,
+      entry: dates
+    })
+    return this
+  }
+
+  updatedAt(dates: string | string[] | UpdatedAtMapping): QueryBuilder {
+    this.addQuery(QueryType.STRING, {
+      field: FileProperty.MODIFIED_TIME,
+      defOperator: Operator.EQUAL,
+      entry: dates
+    })
+    return this
+  }
+
+  trashed(bool?: boolean): QueryBuilder {
     this.addQuery(QueryType.BOOLEAN, {
       field: FileProperty.TRASHED,
-      op: Operator.EQUAL,
-      entry: [`${value}`]
+      defOperator: Operator.EQUAL,
+      entry: `${bool ?? true}`
     })
     return this
   }
 
-  /**
-   * Indicates whether the file is starred or not.
-   */
-  isStarred(value: boolean): this {
+  starred(bool?: boolean): QueryBuilder {
     this.addQuery(QueryType.BOOLEAN, {
       field: FileProperty.STARRED,
-      op: Operator.EQUAL,
-      entry: [`${value}`]
+      defOperator: Operator.EQUAL,
+      entry: `${bool ?? true}`
     })
     return this
   }
 
-  /**
-   * Indicates whether the shared drive is hidden or not.
-   */
-  isHidden(value: boolean): this {
+  hidden(bool?: boolean): QueryBuilder {
     this.addQuery(QueryType.BOOLEAN, {
       field: FileProperty.HIDDEN,
-      op: Operator.EQUAL,
-      entry: [`${value}`]
+      defOperator: Operator.EQUAL,
+      entry: `${bool ?? true}`
     })
     return this
   }
 
-  /**
-   * Joins the inputs into a single string with the `and` operator.
-   */
   build(): string {
+    // TODO: Add trashed = false to query if trashed is not specified.
     return this.queries.join(` ${Operator.AND} `)
   }
 }

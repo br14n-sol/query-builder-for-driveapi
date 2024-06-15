@@ -1,4 +1,5 @@
-import { Operator, OperatorKey } from './enums.js'
+import { Operator, OperatorKey, QueryType } from './enums.js'
+import type { QueryTemplateOptions } from './types.js'
 
 /** Check if value is object. e.g. { a: 1 } => true */
 export function isObject<K extends string, V>(
@@ -40,4 +41,28 @@ export function ensureArray<T>(value: T | T[]): T[] {
 /** Escape single quotes in text. e.g. "'hello'" => "\'hello\'" */
 export function escapeSingleQuotes(value: string): string {
   return value.replace(/'/g, "\\'")
+}
+
+/**
+ * Generate query string.
+ * @example
+ * ```js
+ * generateQuery(QueryType.STRING, { field: 'name', operator: Operator.EQUAL, entry: { key: '', value: 'name-1' } }
+ * //=> "name = 'name-1'"
+ * ```
+ */
+export function generateQuery(
+  type: QueryType,
+  options: QueryTemplateOptions
+): string {
+  const { field, operator, entry } = options
+  const key = escapeSingleQuotes(entry.key)
+  const value = escapeSingleQuotes(String(entry.value))
+
+  return {
+    [QueryType.COLLECTION]: `'${value}' ${operator} ${field}`,
+    [QueryType.STRING]: `${field} ${operator} '${value}'`,
+    [QueryType.BOOLEAN]: `${field} ${operator} ${value}`,
+    [QueryType.HASH]: `${field} ${operator} { key='${key}' and value='${value}' }`
+  }[type]
 }

@@ -21,12 +21,15 @@ export function getOperatorKeyByValue(value: Operator): OperatorKey {
   )?.[1] as OperatorKey
 }
 
-/** Get operator value by key. e.g. '$eq' => Operator.EQUAL */
-export function getOperatorValueByKey(key: OperatorKey): Operator {
+/**
+ * Get operator value by key. e.g. '$eq' => Operator.EQUAL
+ * @returns Valid operator or undefined if key is not found.
+ */
+export function getOperatorValueByKey(key: string): Operator | undefined {
   const operatorName = objectEntries(OperatorKey).find(
     ([_, operatorKey]) => operatorKey === key
-  )?.[0] as keyof typeof Operator
-  return Operator[operatorName]
+  )?.[0]
+  return operatorName ? Operator[operatorName] : undefined
 }
 
 /** Ensure value is array. if not, convert to array */

@@ -1,6 +1,6 @@
 import QueryBuilder from './QueryBuilder.js'
-import { Collection, FileType, VisibilityLevel } from './enums.js'
+import { FileType, VisibilityLevel } from './enums.js'
 
-export { Collection, FileType, VisibilityLevel }
+export { FileType, VisibilityLevel }
 
 export default QueryBuilder

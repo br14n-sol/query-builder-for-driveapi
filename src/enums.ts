@@ -48,7 +48,13 @@ export enum FileProperty {
   SHORTCUT_TARGET_ID = 'shortcutDetails.targetId',
   SHARED_WITH_ME = 'sharedWithMe',
   TRASHED = 'trashed',
-  STARRED = 'starred',
+  STARRED = 'starred'
+}
+
+export enum SharedDriveProperty {
+  ORG_UNIT_ID = 'orgUnitId',
+  ORGANIZER_COUNT = 'organizerCount',
+  MEMBER_COUNT = 'memberCount',
   HIDDEN = 'hidden'
 }
 

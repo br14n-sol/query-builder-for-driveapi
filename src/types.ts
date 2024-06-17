@@ -3,6 +3,7 @@ import type {
   FileProperty,
   Operator,
   OperatorKey,
+  SharedDriveProperty,
   VisibilityLevel
 } from './enums.js'
 
@@ -67,8 +68,10 @@ export type ShortcutTargetIdMapping = PartialRecord<
   string | string[]
 >
 
+type Field = Collection | FileProperty | SharedDriveProperty
+
 export type QueryTemplateOptions = {
-  field: FileProperty | Collection
+  field: Field
   operator: Operator
   entry: {
     key: string
@@ -77,7 +80,7 @@ export type QueryTemplateOptions = {
 }
 
 export type AddQueryOptions = {
-  field: FileProperty | Collection
+  field: Field
   defOperator: Operator
   entry: string | string[] | Record<string, unknown> | OperatorKeyMapping
 }

@@ -2,6 +2,7 @@ import {
   FileProperty,
   Operator,
   QueryType,
+  SharedDriveProperty,
   type VisibilityLevel
 } from './enums.js'
 import type {
@@ -195,7 +196,7 @@ class QueryBuilder {
 
   hidden(bool?: boolean): QueryBuilder {
     this.addQuery(QueryType.BOOLEAN, {
-      field: FileProperty.HIDDEN,
+      field: SharedDriveProperty.HIDDEN,
       defOperator: Operator.EQUAL,
       entry: `${bool ?? true}`
     })

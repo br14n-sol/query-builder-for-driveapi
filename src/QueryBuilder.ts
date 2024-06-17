@@ -103,30 +103,30 @@ class QueryBuilder {
   }
 
   visibility(
-    level: VisibilityLevel | VisibilityLevel[] | VisibilityMapping
+    levels: VisibilityLevel | VisibilityLevel[] | VisibilityMapping
   ): QueryBuilder {
     this.addQuery(QueryType.STRING, {
       field: FileProperty.VISIBILITY,
       defOperator: Operator.EQUAL,
-      entry: level
+      entry: levels
     })
     return this
   }
 
-  property(properties: Record<string, unknown | unknown[]>): QueryBuilder {
+  property(props: Record<string, unknown | unknown[]>): QueryBuilder {
     this.addQuery(QueryType.HASH, {
       field: FileProperty.PROPERTIES,
       defOperator: Operator.HAS,
-      entry: properties
+      entry: props
     })
     return this
   }
 
-  appProperty(properties: Record<string, unknown | unknown[]>): QueryBuilder {
+  appProperty(props: Record<string, unknown | unknown[]>): QueryBuilder {
     this.addQuery(QueryType.HASH, {
       field: FileProperty.APP_PROPERTIES,
       defOperator: Operator.HAS,
-      entry: properties
+      entry: props
     })
     return this
   }

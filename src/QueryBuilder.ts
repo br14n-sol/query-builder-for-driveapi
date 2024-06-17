@@ -7,13 +7,11 @@ import {
 import type {
   AddQueryOptions,
   CollectionMapping,
-  CreatedAtMapping,
+  DateMapping,
   FileNameMapping,
   FileTypeMapping,
   OperatorKeyMapping,
   ShortcutTargetIdMapping,
-  UpdatedAtMapping,
-  ViewedAtMapping,
   VisibilityMapping
 } from './types.js'
 import * as utils from './utils.js'
@@ -130,7 +128,7 @@ class QueryBuilder {
     return this
   }
 
-  createdAt(dates: string | string[] | CreatedAtMapping): QueryBuilder {
+  createdAt(dates: string | string[] | DateMapping): QueryBuilder {
     this.addQuery(QueryType.STRING, {
       field: FileProperty.CREATED_TIME,
       defOperator: Operator.EQUAL,
@@ -139,7 +137,7 @@ class QueryBuilder {
     return this
   }
 
-  updatedAt(dates: string | string[] | UpdatedAtMapping): QueryBuilder {
+  updatedAt(dates: string | string[] | DateMapping): QueryBuilder {
     this.addQuery(QueryType.STRING, {
       field: FileProperty.MODIFIED_TIME,
       defOperator: Operator.EQUAL,
@@ -148,7 +146,7 @@ class QueryBuilder {
     return this
   }
 
-  viewedAt(dates: string | string[] | ViewedAtMapping): QueryBuilder {
+  viewedAt(dates: string | string[] | DateMapping): QueryBuilder {
     this.addQuery(QueryType.STRING, {
       field: FileProperty.VIEWED_BY_ME_TIME,
       defOperator: Operator.EQUAL,

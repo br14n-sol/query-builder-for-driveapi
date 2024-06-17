@@ -20,23 +20,10 @@ type FileTypeOperators =
 
 type VisibilityOperators = OperatorKey.EQUAL | OperatorKey.NOT_EQUAL
 
-type CreatedAtOperators =
-  | OperatorKey.EQUAL
-  | OperatorKey.NOT_EQUAL
-  | OperatorKey.LESS_THAN
-  | OperatorKey.LESS_THAN_OR_EQUAL
-  | OperatorKey.GREATER_THAN
-  | OperatorKey.GREATER_THAN_OR_EQUAL
-
-type UpdatedAtOperators =
-  | OperatorKey.EQUAL
-  | OperatorKey.NOT_EQUAL
-  | OperatorKey.LESS_THAN
-  | OperatorKey.LESS_THAN_OR_EQUAL
-  | OperatorKey.GREATER_THAN
-  | OperatorKey.GREATER_THAN_OR_EQUAL
-
-type ViewedAtOperators =
+/**
+ * Common operators for createdAt, updatedAt and viewedAt methods
+ */
+type DateOperators =
   | OperatorKey.EQUAL
   | OperatorKey.NOT_EQUAL
   | OperatorKey.LESS_THAN
@@ -65,20 +52,10 @@ export type VisibilityMapping = PartialRecord<
   VisibilityLevel | VisibilityLevel[]
 >
 
-export type CreatedAtMapping = PartialRecord<
-  CreatedAtOperators,
-  string | string[]
->
-
-export type UpdatedAtMapping = PartialRecord<
-  UpdatedAtOperators,
-  string | string[]
->
-
-export type ViewedAtMapping = PartialRecord<
-  ViewedAtOperators,
-  string | string[]
->
+/**
+ * Common mapping with operators for createdAt, updatedAt and viewedAt methods
+ */
+export type DateMapping = PartialRecord<DateOperators, string | string[]>
 
 export type ShortcutTargetIdMapping = PartialRecord<
   ShortcutTargetIdOperators,

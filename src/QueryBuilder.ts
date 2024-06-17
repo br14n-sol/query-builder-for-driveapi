@@ -58,7 +58,6 @@ class QueryBuilder {
 
   // TODO: Add alternative to negate query.
   // TODO: Add support to viewedByMeTime.
-  // TODO: Add support to sharedWithMe.
   // TODO: Add support to shortcutDetails.targetId.
   // TODO: Add support to memberCount.
   // TODO: Add support to organizerCount.
@@ -145,6 +144,15 @@ class QueryBuilder {
       field: FileProperty.MODIFIED_TIME,
       defOperator: Operator.EQUAL,
       entry: dates
+    })
+    return this
+  }
+
+  shared(bool?: boolean): QueryBuilder {
+    this.addQuery(QueryType.BOOLEAN, {
+      field: FileProperty.SHARED_WITH_ME,
+      defOperator: Operator.EQUAL,
+      entry: `${bool ?? true}`
     })
     return this
   }

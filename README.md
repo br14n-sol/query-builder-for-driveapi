@@ -173,7 +173,6 @@ visibility({
 ```
 
 </td></tr>
-<tr><td>sharedWithMe</td><td>❌</td><td>❌</td></tr>
 <tr><td>properties</td><td>
 
 ```ts
@@ -259,6 +258,23 @@ updatedAt({
   
 </td></tr>
 <tr><td>viewedByMeTime</td><td>❌</td><td>❌</td></tr>
+<tr><td>sharedWithMe</td>
+<td>
+
+```ts
+shared(bool?)
+```
+
+</td><td>
+
+```js
+shared()
+//=> sharedWithMe = true
+shared(false)
+//=> sharedWithMe = false
+```
+
+</td></tr>
 <tr><td>trashed</td><td>
 
 ```ts

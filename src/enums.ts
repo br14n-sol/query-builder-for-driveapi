@@ -44,6 +44,7 @@ export enum FileProperty {
   APP_PROPERTIES = 'appProperties',
   CREATED_TIME = 'createdTime',
   MODIFIED_TIME = 'modifiedTime',
+  SHARED_WITH_ME = 'sharedWithMe',
   TRASHED = 'trashed',
   STARRED = 'starred',
   HIDDEN = 'hidden'

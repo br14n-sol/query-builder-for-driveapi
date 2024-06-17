@@ -351,7 +351,27 @@ starred(false)
 ```
 
 </td></tr>
-<tr><td>orgUnitId</td><td>❌</td><td>❌</td></tr>
+<tr><td>orgUnitId</td><td>
+
+```ts
+orgDriveId(ids)
+```
+
+</td><td>
+
+```ts
+orgDriveId('12345')
+//=> orgUnitId = '12345'
+orgDriveId(['12345', '67890'])
+//=> (orgUnitId = '12345' or orgUnitId = '67890')
+orgDriveId({
+  $eq: '12345',
+  $ne: ['67890', '12345-2']
+})
+//=> orgUnitId = '12345' and (orgUnitId != '67890' or orgUnitId != '12345-2')
+```
+
+</td></tr>
 <tr><td>organizerCount</td><td>
 
 ```ts

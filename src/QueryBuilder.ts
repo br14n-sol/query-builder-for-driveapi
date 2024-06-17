@@ -12,6 +12,7 @@ import type {
   FileNameMapping,
   FileTypeMapping,
   OperatorKeyMapping,
+  OrgDriveIdMapping,
   ShortcutTargetIdMapping,
   VisibilityMapping
 } from './types.js'
@@ -58,7 +59,6 @@ class QueryBuilder {
   }
 
   // TODO: Add alternative to negate query.
-  // TODO: Add support to orgUnitId.
 
   collection(collections: CollectionMapping): QueryBuilder {
     for (const [collection, entries] of utils.objectEntries(collections)) {
@@ -188,6 +188,15 @@ class QueryBuilder {
       field: FileProperty.STARRED,
       defOperator: Operator.EQUAL,
       entry: `${bool ?? true}`
+    })
+    return this
+  }
+
+  orgDriveId(ids: string | string[] | OrgDriveIdMapping): QueryBuilder {
+    this.addQuery(QueryType.STRING, {
+      field: SharedDriveProperty.ORG_UNIT_ID,
+      defOperator: Operator.EQUAL,
+      entry: ids
     })
     return this
   }

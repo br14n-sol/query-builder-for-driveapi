@@ -35,6 +35,8 @@ type ComparisonOperators =
 
 type ShortcutTargetIdOperators = OperatorKey.EQUAL | OperatorKey.NOT_EQUAL
 
+type OrgDriveIdOperators = OperatorKey.EQUAL | OperatorKey.NOT_EQUAL
+
 export type OperatorKeyMapping = PartialRecord<OperatorKey, string | string[]>
 
 export type CollectionMapping = PartialRecord<Collection, string | string[]>
@@ -65,6 +67,11 @@ export type ComparisonMapping = PartialRecord<
 
 export type ShortcutTargetIdMapping = PartialRecord<
   ShortcutTargetIdOperators,
+  string | string[]
+>
+
+export type OrgDriveIdMapping = PartialRecord<
+  OrgDriveIdOperators,
   string | string[]
 >
 

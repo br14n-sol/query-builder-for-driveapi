@@ -36,6 +36,14 @@ type UpdatedAtOperators =
   | OperatorKey.GREATER_THAN
   | OperatorKey.GREATER_THAN_OR_EQUAL
 
+type ViewedAtOperators =
+  | OperatorKey.EQUAL
+  | OperatorKey.NOT_EQUAL
+  | OperatorKey.LESS_THAN
+  | OperatorKey.LESS_THAN_OR_EQUAL
+  | OperatorKey.GREATER_THAN
+  | OperatorKey.GREATER_THAN_OR_EQUAL
+
 export type OperatorKeyMapping = PartialRecord<OperatorKey, string | string[]>
 
 export type CollectionMapping = PartialRecord<Collection, string | string[]>
@@ -62,6 +70,11 @@ export type CreatedAtMapping = PartialRecord<
 
 export type UpdatedAtMapping = PartialRecord<
   UpdatedAtOperators,
+  string | string[]
+>
+
+export type ViewedAtMapping = PartialRecord<
+  ViewedAtOperators,
   string | string[]
 >
 

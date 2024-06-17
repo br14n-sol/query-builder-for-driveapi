@@ -12,6 +12,7 @@ import type {
   FileTypeMapping,
   OperatorKeyMapping,
   UpdatedAtMapping,
+  ViewedAtMapping,
   VisibilityMapping
 } from './types.js'
 import * as utils from './utils.js'
@@ -57,7 +58,6 @@ class QueryBuilder {
   }
 
   // TODO: Add alternative to negate query.
-  // TODO: Add support to viewedByMeTime.
   // TODO: Add support to shortcutDetails.targetId.
   // TODO: Add support to memberCount.
   // TODO: Add support to organizerCount.
@@ -142,6 +142,15 @@ class QueryBuilder {
   updatedAt(dates: string | string[] | UpdatedAtMapping): QueryBuilder {
     this.addQuery(QueryType.STRING, {
       field: FileProperty.MODIFIED_TIME,
+      defOperator: Operator.EQUAL,
+      entry: dates
+    })
+    return this
+  }
+
+  viewedAt(dates: string | string[] | ViewedAtMapping): QueryBuilder {
+    this.addQuery(QueryType.STRING, {
+      field: FileProperty.VIEWED_BY_ME_TIME,
       defOperator: Operator.EQUAL,
       entry: dates
     })

@@ -25,7 +25,7 @@ npm install query-builder-for-driveapi
 
 Before we start with the basic usage, let's look at all the classes and enums exported from this package.
 
-```js
+```ts
 import QueryBuilder, { // Class builder for generating queries
   FileType, // Enum with basic file types (mime types)
   VisibilityLevel // Enum with visibility levels
@@ -34,7 +34,7 @@ import QueryBuilder, { // Class builder for generating queries
 
 ## Basic Usage
 
-```js
+```ts
 // Create an instance of QueryBuilder
 const qb = new QueryBuilder()
 
@@ -66,7 +66,7 @@ collection(collections)
 
 </td><td rowspan="4">
 
-```js
+```ts
 collection({ parents: '12345' })
 //=> '12345' in parents
 collection({
@@ -94,13 +94,13 @@ collection({
 <tbody>
 <tr><td>name</td><td>
 
-```js
+```ts
 fileName(names)
 ```
 
 </td><td>
 
-```js
+```ts
 fileName('test.txt')
 //=> name = 'test.txt'
 fileName(['test.txt', 'test2.txt'])
@@ -122,7 +122,7 @@ content(inputs)
 
 </td><td>
 
-```js
+```ts
 content('some-content')
 //=> fullText = 'some-content'
 content(['some-content', 'some-other-content'])
@@ -138,7 +138,7 @@ fileType(types)
 
 </td><td>
 
-```js
+```ts
 fileType('image/png')
 //=> mimeType = 'image/png'
 fileType(['image/png', 'image/jpeg'])
@@ -160,7 +160,7 @@ visibility(levels)
 
 </td><td>
 
-```js
+```ts
 visibility('limited')
 //=> visibility = 'limited'
 visibility(['limited', 'public'])
@@ -181,7 +181,7 @@ property(props)
 
 </td><td>
 
-```js
+```ts
 property({
   prop: 'value',
   prop2: [123, 'value-2', true]
@@ -198,7 +198,7 @@ appProperty(props)
 
 </td><td>
 
-```js
+```ts
 appProperty({
   prop: 'value',
   prop2: [123, 'value-2', true]
@@ -215,7 +215,7 @@ createdAt(dates)
 
 </td><td>
 
-```js
+```ts
 createdAt('2023-01-01T00:00:00.000Z')
 //=> createdTime = '2023-01-01T00:00:00.000Z'
 createdAt(['2023-01-01T00:00:00.000Z', '2023-01-02T00:00:00.000Z'])
@@ -240,7 +240,7 @@ updatedAt(dates)
 
 </td><td>
 
-```js
+```ts
 updatedAt('2023-01-01T00:00:00.000Z')
 //=> modifiedTime = '2023-01-01T00:00:00.000Z'
 updatedAt(['2023-01-01T00:00:00.000Z', '2023-01-02T00:00:00.000Z'])
@@ -257,9 +257,32 @@ updatedAt({
 ```
   
 </td></tr>
-<tr><td>viewedByMeTime</td><td>❌</td><td>❌</td></tr>
-<tr><td>sharedWithMe</td>
-<td>
+<tr><td>viewedByMeTime</td><td>
+
+```ts
+viewedAt(dates)
+```
+
+</td><td>
+
+```ts
+viewedAt('2023-01-01T00:00:00.000Z')
+//=> viewedByMeTime = '2023-01-01T00:00:00.000Z'
+viewedAt(['2023-01-01T00:00:00.000Z', '2023-01-02T00:00:00.000Z'])
+//=> (viewedByMeTime = '2023-01-01T00:00:00.000Z' or viewedByMeTime = '2023-01-02T00:00:00.000Z')
+viewedAt({
+  $eq: '2023-01-01T00:00:00.000Z',
+  $ne: ['2023-01-02T00:00:00.000Z', '2023-01-03T00:00:00.000Z'],
+  $lt: '2023-01-01T00:00:00.000Z',
+  $lte: '2023-01-01T00:00:00.000Z',
+  $gt: '2023-01-01T00:00:00.000Z',
+  $gte: '2023-01-01T00:00:00.000Z'
+})
+//=> viewedByMeTime = '2023-01-01T00:00:00.000Z' and (viewedByMeTime != '2023-01-02T00:00:00.000Z' or viewedByMeTime != '2023-01-03T00:00:00.000Z') and viewedByMeTime < '2023-01-01T00:00:00.000Z' and viewedByMeTime <= '2023-01-01T00:00:00.000Z' and viewedByMeTime > '2023-01-01T00:00:00.000Z' and viewedByMeTime >= '2023-01-01T00:00:00.000Z'
+```
+
+</td></tr>
+<tr><td>sharedWithMe</td><td>
 
 ```ts
 shared(bool?)
@@ -267,7 +290,7 @@ shared(bool?)
 
 </td><td>
 
-```js
+```ts
 shared()
 //=> sharedWithMe = true
 shared(false)
@@ -283,7 +306,7 @@ trashed(bool?)
 
 </td><td>
 
-```js
+```ts
 trashed()
 //=> trashed = true
 trashed(false)
@@ -299,7 +322,7 @@ starred(bool?)
 
 </td><td>
 
-```js
+```ts
 starred()
 //=> starred = true
 starred(false)
@@ -315,7 +338,7 @@ hidden(bool?)
 
 </td><td>
 
-```js
+```ts
 hidden()
 //=> hidden = true
 hidden(false)

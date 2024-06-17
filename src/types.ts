@@ -44,6 +44,8 @@ type ViewedAtOperators =
   | OperatorKey.GREATER_THAN
   | OperatorKey.GREATER_THAN_OR_EQUAL
 
+type ShortcutTargetIdOperators = OperatorKey.EQUAL | OperatorKey.NOT_EQUAL
+
 export type OperatorKeyMapping = PartialRecord<OperatorKey, string | string[]>
 
 export type CollectionMapping = PartialRecord<Collection, string | string[]>
@@ -75,6 +77,11 @@ export type UpdatedAtMapping = PartialRecord<
 
 export type ViewedAtMapping = PartialRecord<
   ViewedAtOperators,
+  string | string[]
+>
+
+export type ShortcutTargetIdMapping = PartialRecord<
+  ShortcutTargetIdOperators,
   string | string[]
 >
 

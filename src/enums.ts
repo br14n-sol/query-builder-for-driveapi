@@ -45,6 +45,7 @@ export enum FileProperty {
   CREATED_TIME = 'createdTime',
   MODIFIED_TIME = 'modifiedTime',
   VIEWED_BY_ME_TIME = 'viewedByMeTime',
+  SHORTCUT_TARGET_ID = 'shortcutDetails.targetId',
   SHARED_WITH_ME = 'sharedWithMe',
   TRASHED = 'trashed',
   STARRED = 'starred',

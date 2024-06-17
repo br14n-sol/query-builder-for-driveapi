@@ -11,6 +11,7 @@ import type {
   FileNameMapping,
   FileTypeMapping,
   OperatorKeyMapping,
+  ShortcutTargetIdMapping,
   UpdatedAtMapping,
   ViewedAtMapping,
   VisibilityMapping
@@ -58,7 +59,6 @@ class QueryBuilder {
   }
 
   // TODO: Add alternative to negate query.
-  // TODO: Add support to shortcutDetails.targetId.
   // TODO: Add support to memberCount.
   // TODO: Add support to organizerCount.
   // TODO: Add support to orgUnitId.
@@ -153,6 +153,17 @@ class QueryBuilder {
       field: FileProperty.VIEWED_BY_ME_TIME,
       defOperator: Operator.EQUAL,
       entry: dates
+    })
+    return this
+  }
+
+  shortcutTargetId(
+    ids: string | string[] | ShortcutTargetIdMapping
+  ): QueryBuilder {
+    this.addQuery(QueryType.STRING, {
+      field: FileProperty.SHORTCUT_TARGET_ID,
+      defOperator: Operator.EQUAL,
+      entry: ids
     })
     return this
   }

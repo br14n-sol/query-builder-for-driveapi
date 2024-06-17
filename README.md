@@ -282,6 +282,27 @@ viewedAt({
 ```
 
 </td></tr>
+<tr><td>shortcutDetails.targetId</td><td>
+
+```ts
+shortcutTargetId(ids)
+```
+
+</td><td>
+
+```ts
+shortcutTargetId('12345')
+//=> shortcutDetails.targetId = '12345'
+shortcutTargetId(['12345', '67890'])
+//=> (shortcutDetails.targetId = '12345' or shortcutDetails.targetId = '67890')
+shortcutTargetId({
+  $eq: '12345',
+  $ne: ['67890', '12345-2']
+})
+//=> shortcutDetails.targetId = '12345' and (shortcutDetails.targetId != '67890' or shortcutDetails.targetId != '12345-2')
+```
+
+</td></tr>
 <tr><td>sharedWithMe</td><td>
 
 ```ts
@@ -346,7 +367,6 @@ hidden(false)
 ```
 
 </td></tr>
-<tr><td>shortcutDetails.targetId</td><td>❌</td><td>❌</td></tr>
 <tr><td>memberCount</td><td>❌</td><td>❌</td></tr>
 <tr><td>orgUnitId</td><td>❌</td><td>❌</td></tr>
 <tr><td>organizerCount</td><td>❌</td><td>❌</td></tr>

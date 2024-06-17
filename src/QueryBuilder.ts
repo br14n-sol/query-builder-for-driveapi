@@ -58,7 +58,6 @@ class QueryBuilder {
   }
 
   // TODO: Add alternative to negate query.
-  // TODO: Add support to memberCount.
   // TODO: Add support to orgUnitId.
 
   collection(collections: CollectionMapping): QueryBuilder {
@@ -196,6 +195,15 @@ class QueryBuilder {
   organizerCount(counts: string | string[] | ComparisonMapping): QueryBuilder {
     this.addQuery(QueryType.STRING, {
       field: SharedDriveProperty.ORGANIZER_COUNT,
+      defOperator: Operator.EQUAL,
+      entry: counts
+    })
+    return this
+  }
+
+  memberCount(counts: string | string[] | ComparisonMapping): QueryBuilder {
+    this.addQuery(QueryType.STRING, {
+      field: SharedDriveProperty.MEMBER_COUNT,
       defOperator: Operator.EQUAL,
       entry: counts
     })

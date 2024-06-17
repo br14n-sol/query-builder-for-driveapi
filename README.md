@@ -377,7 +377,31 @@ organizerCount({
 ```
 
 </td></tr>
-<tr><td>memberCount</td><td>❌</td><td>❌</td></tr>
+<tr><td>memberCount</td><td>
+
+```ts
+memberCount(counts)
+```
+
+</td><td>
+
+```ts
+memberCount('123')
+//=> memberCount = '123'
+memberCount(['123', '678'])
+//=> (memberCount = '123' or memberCount = '678')
+memberCount({
+  $eq: '123',
+  $ne: ['67890', '12345-2'],
+  $lt: '586',
+  $lte: '986',
+  $gt: '145',
+  $gte: '265'
+})
+//=> memberCount = '123' and (memberCount != '67890' or memberCount != '12345-2') and memberCount < '586' and memberCount <= '986' and memberCount > '145' and memberCount >= '265'
+```
+
+</td></tr>
 <tr><td>hidden</td><td>
 
 ```ts

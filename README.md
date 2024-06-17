@@ -1,10 +1,19 @@
-# Query Builder for DriveAPI
+<h1 align="center">
+  query-builder-for-driveapi
+</h1>
 
-![node-current](https://img.shields.io/node/v/query-builder-for-driveapi?color=darkgreen)
-![version](https://img.shields.io/npm/v/query-builder-for-driveapi?color=orange)
-![downloads](https://img.shields.io/npm/dm/query-builder-for-driveapi)
+<p align="center">
+  <b>Easily generate queries for the Google Drive™ API.</b>
+</p>
 
-Easily generate queries for the Google Drive API.
+<div align="center">
+
+  ![license](https://img.shields.io/npm/l/query-builder-for-driveapi?color=blue)
+  ![node-current](https://img.shields.io/node/v/query-builder-for-driveapi?color=darkgreen)
+  ![version](https://img.shields.io/npm/v/query-builder-for-driveapi?color=orange)
+  ![downloads](https://img.shields.io/npm/dt/query-builder-for-driveapi.svg)
+
+</div>
 
 ## Installation
 
@@ -12,324 +21,298 @@ Easily generate queries for the Google Drive API.
 npm install query-builder-for-driveapi
 ```
 
-## Importing
+## Get Started
+
+Before we start with the basic usage, let's look at all the classes and enums exported from this package.
 
 ```js
-// Using ES6 Imports
-import QueryBuilder, { Collection, FileType, VisibilityLevel } from 'query-builder-for-driveapi'
-
-// Using CommonJS
-const QueryBuilder = require('query-builder-for-driveapi')
-const { Collection, FileType, VisibilityLevel } = QueryBuilder
+import QueryBuilder, { // Class builder for generating queries
+  FileType, // Enum with basic file types (mime types)
+  VisibilityLevel // Enum with visibility levels
+} from 'query-builder-for-driveapi'
 ```
 
-## Usage
+## Basic Usage
 
 ```js
-// Create an instance
+// Create an instance of QueryBuilder
 const qb = new QueryBuilder()
 
-// Add inputs (queries)
-qb.getByCollection(Collection.PARENTS, 'parent-id')
-qb.getByFileName('something')
+// Add inputs (queries) to the query builder
+qb.collection({ parents: 'parent-id' })
+qb.fileName('test.txt')
 
-// Build inputs (queries) in a query
+// Build the query into a string
 const query = qb.build()
-//=> ('parent-id' in parents) and (name = 'something')
+//=> 'parent-id' in parents and name = 'test.txt' and trashed = false
 ```
 
-## API Reference
+> [!IMPORTANT]
+> To avoid "accidents", the `build()` method adds a `trashed = false` to the query by default. <br>
+> <b>Note: If you want to change this behavior in your query, simply call the `trashed()` method before calling the `build()` method.</b>
 
-### Constructor
+## Supported Collections
 
-Create an instance of QueryBuilder.
+<table>
+<thead>
+<tr><th>Collection</th><th>Method</th><th>Sample</th></tr>
+</thead>
+<tbody>
+<tr><td>parents</td><td rowspan="4">
+
+```ts
+collection(collections)
+```
+
+</td><td rowspan="4">
 
 ```js
-new QueryBuilder()
+collection({ parents: '12345' })
+//=> '12345' in parents
+collection({
+  parents: ['12345', '67890'],
+  owners: 'test@example.org',
+  writers: ['test@example.org', 'test2@example.org'],
+  readers: 'test2@example.org'
+})
+//=> (12345 in parents or 67890 in parents) and 'test@example.org' in owners and ('test@example.org' in writers or 'test2@example.org' in writers) and 'test2@example.org' in readers
 ```
 
-### Methods
+</td></tr>
+<tr><td>owners</td></tr>
+<tr><td>writers</td></tr>
+<tr><td>readers</td></tr>
+</tbody>
+</table>
 
-From now on all the examples of each method will use an instance of `QueryBuilder` associated to the constant `qb`.
+## Supported fields
 
-#### getByCollection(collection, value)
-
-Indicates whether the collection contains the specified values.
-
-##### collection
-
-Type: `Collection`
-
-- `Collection.PARENTS`:
-```js
-qb.getByCollection(Collection.PARENTS, ...).build()
-//=> ('...' in parents)
-```
-
-- `Collection.OWNERS`:
-```js
-qb.getByCollection(Collection.OWNERS, ...).build()
-//=> ('...' in owners)
-```
-
-- `Collection.WRITERS`:
-```js
-qb.getByCollection(Collection.WRITERS, ...).build()
-//=> ('...' in writers)
-```
-
-- `Collection.READERS`:
-```js
-qb.getByCollection(Collection.READERS, ...).build()
-//=> ('...' in readers)
-```
-
-##### value
-
-Type: `string | string[]`
+<table>
+<thead>
+<tr><th>Field</th><th>Method</th><th>Sample</th></tr>
+</thead>
+<tbody>
+<tr><td>name</td><td>
 
 ```js
-qb.getByCollection(..., 'value').build()
-//=> ('value' in ...)
-
-qb.getByCollection(..., ['value-1', 'value-2']).build()
-//=> ('value-1' in ... or 'value-2' in ...)
+fileName(names)
 ```
 
-#### getByFileName(filename)
-
-Indicates whether the file name is equal to the specified file name.
-
-##### filename
-
-Type: `string | string[]`
+</td><td>
 
 ```js
-qb.getByFileName('value').build()
-//=> (name = 'value')
-
-qb.getByFileName(['value-1', 'value-2']).build()
-//=> (name = 'value-1' or name = 'value-2')
+fileName('test.txt')
+//=> name = 'test.txt'
+fileName(['test.txt', 'test2.txt'])
+//=> (name = 'test.txt' or name = 'test2.txt')
+fileName({
+  $eq: 'test.txt',
+  $ne: ['example.txt', 'test2.txt'],
+  $contains: 'test'
+})
+//=> name = 'test.txt' and (name != 'example.txt' or name != 'test2.txt') and name contains 'test'
 ```
 
-#### getByContent(value)
+</td></tr>
+<tr><td>fullText</td><td>
 
-Indicates whether the file name, description, indexableText or content text properties or metadata of the file contains the specified value.
+```ts
+content(inputs)
+```
 
-##### value
-
-Type: `string | string[]`
+</td><td>
 
 ```js
-qb.getByContent('value').build()
-//=> (fullText = 'value')
-
-qb.getByContent(['value-1', 'value-2']).build()
-//=> (fullText = 'value-1' or fullText = 'value-2')
+content('some-content')
+//=> fullText = 'some-content'
+content(['some-content', 'some-other-content'])
+//=> (fullText = 'some-content' or fullText = 'some-other-content')
 ```
 
-#### getByFileType(filetype)
+</td></tr>
+<tr><td>mimeType</td><td>
 
-Indicates whether the MIME type of the file is equal to the specified file type.
-
-##### filetype
-
-Type: `string | FileType | (string | FileType)[]`
-
-- `FileType.FOLDER`:
-```js
-qb.getByFileType(FileType.FOLDER).build()
-//=> (mimeType = 'application/vnd.google-apps.folder')
+```ts
+fileType(types)
 ```
 
-- `FileType.DOCUMENT`:
-```js
-qb.getByFileType(FileType.DOCUMENT).build()
-//=> (mimeType = 'application/vnd.google-apps.document')
-```
-
-- `FileType.SPREADSHEET`:
-```js
-qb.getByFileType(FileType.SPREADSHEET).build()
-//=> (mimeType = 'application/vnd.google-apps.spreadsheet')
-```
-
-- `FileType.PRESENTATION`:
-```js
-qb.getByFileType(FileType.PRESENTATION).build()
-//=> (mimeType = 'application/vnd.google-apps.presentation')
-```
-
-- `FileType.FORM`:
-```js
-qb.getByFileType(FileType.FORM).build()
-//=> (mimeType = 'application/vnd.google-apps.form')
-```
-
-- `Others`:
-```js
-qb.getByFileType('image/jpeg').build()
-//=> (mimeType = 'image/jpeg')
-
-qb.getByFileType(['image/png', FileType.DOCUMENT]).build()
-//=> (mimeType = 'image/png' or mimeType = 'application/vnd.google-apps.document')
-```
-
-#### getByCreatedAt(timestamp)
-
-Indicates whether the creation date of the file is equal to the specified timestamp.
-
-##### timestamp
-
-Type: `string | string[]`
-
-Uses [RFC 3339](https://datatracker.ietf.org/doc/html/rfc3339) format, the default timezone is UTC, such as 2011-10-05T14:48:00Z.
+</td><td>
 
 ```js
-qb.getByCreatedAt('2011-10-05T14:48:00Z').build()
-//=> (createdTime = '2011-10-05T14:48:00Z')
-
-qb.getByCreatedAt(['2019-09-07T15:50Z', '2012-06-04T12:00:00Z']).build()
-//=> (createdTime = '2019-09-07T15:50Z' or createdTime = '2012-06-04T12:00:00Z')
+fileType('image/png')
+//=> mimeType = 'image/png'
+fileType(['image/png', 'image/jpeg'])
+//=> (mimeType = 'image/png' or mimeType = 'image/jpeg')
+fileType({
+  $eq: 'image/png',
+  $ne: ['image/jpeg', 'image/gif'],
+  $contains: 'image'
+})
+//=> mimeType = 'image/png' and (mimeType != 'image/jpeg' or mimeType != 'image/gif') and mimeType contains 'image'
 ```
 
-#### getByUpdatedAt(timestamp)
+</td></tr>
+<tr><td>visibility</td><td>
 
-Indicates whether the modified date of the file is equal to the specified timestamp.
+```ts
+visibility(levels)
+```
 
-##### timestamp
-
-Type: `string | string[]`
-
-Uses [RFC 3339](https://datatracker.ietf.org/doc/html/rfc3339) format, the default timezone is UTC, such as 2011-10-05T14:48:00Z.
+</td><td>
 
 ```js
-qb.getByUpdatedAt('2011-10-05T14:48:00Z').build()
-//=> (modifiedTime = '2011-10-05T14:48:00Z')
-
-qb.getByUpdatedAt(['2019-09-07T15:50Z', '2012-06-04T12:00:00Z']).build()
-//=> (modifiedTime = '2019-09-07T15:50Z' or modifiedTime = '2012-06-04T12:00:00Z')
+visibility('limited')
+//=> visibility = 'limited'
+visibility(['limited', 'public'])
+//=> (visibility = 'limited' or visibility = 'public')
+visibility({
+  $eq: 'limited',
+  $ne: ['public', 'private']
+})
+//=> visibility = 'limited' and (visibility != 'public' or visibility != 'private')
 ```
 
-#### getByVisibility(visibilityLevel)
+</td></tr>
+<tr><td>sharedWithMe</td><td>❌</td><td>❌</td></tr>
+<tr><td>properties</td><td>
 
-Indicates whether the visibility level of the file is equal to the specified visibility level.
-
-##### visibilityLevel
-
-Type: `VisibilityLevel | VisibilityLevel[]`
-
-- `VisibilityLevel.ANYONE_CAN_FIND`:
-```js
-qb.getByVisibility(VisibilityLevel.ANYONE_CAN_FIND).build()
-//=> (visibilityLevel = 'anyoneCanFind')
+```ts
+property(props)
 ```
 
-- `VisibilityLevel.ANYONE_WITH_LINK`:
-```js
-qb.getByVisibility(VisibilityLevel.ANYONE_WITH_LINK).build()
-//=> (visibilityLevel = 'anyoneWithLink')
-```
-
-- `VisibilityLevel.DOMAIN_CAN_FIND`:
-```js
-qb.getByVisibility(VisibilityLevel.DOMAIN_CAN_FIND).build()
-//=> (visibilityLevel = 'domainCanFind')
-```
-
-- `VisibilityLevel.DOMAIN_WITH_LINK`:
-```js
-qb.getByVisibility(VisibilityLevel.DOMAIN_WITH_LINK).build()
-//=> (visibilityLevel = 'domainWithLink')
-```
-
-- `VisibilityLevel.LIMITED`:
-```js
-qb.getByVisibility(VisibilityLevel.LIMITED).build()
-//=> (visibilityLevel = 'limited')
-```
-
-#### getByPublicProp(properties)
-
-Indicates whether the file has the specified public properties.
-
-#### properties
-
-Type: `Record<string, unknown>`
+</td><td>
 
 ```js
-qb.getByPublicProp({
-  name: 'wrench',
-  mass: 1.3 // kg
-}).build()
-//=> (properties has { key='name' and value='wrench' } and properties has { key='mass' and value='1.3' })
+property({
+  prop: 'value',
+  prop2: [123, 'value-2', true]
+})
+//=> properties has { key='prop' and value='value' } and (properties has { key='prop2' and value='123' } or properties has { key='prop2' and value='value-2' } or properties has { key='prop2' and value='true' })
 ```
 
-#### getByPrivateProp(properties)
+</td></tr>
+<tr><td>appProperties</td><td>
 
-Indicates whether the file has the specified private properties.
+```ts
+appProperty(props)
+```
 
-##### properties
-
-Type: `Record<string, unknown>`
+</td><td>
 
 ```js
-qb.getByPrivateProp({
-  deviceId: 'd65dd82e-46fe-448f-a6fd-96009a8f97e4'
-}).build()
-//=> (appProperties has { key='deviceId' and value='d65dd82e-46fe-448f-a6fd-96009a8f97e4' })
+appProperty({
+  prop: 'value',
+  prop2: [123, 'value-2', true]
+})
+//=> appProperties has { key='prop' and value='value' } and (appProperties has { key='prop2' and value='123' } or appProperties has { key='prop2' and value='value-2' } or appProperties has { key='prop2' and value='true' })
 ```
 
-#### isTrashed(boolean)
+</td></tr>
+<tr><td>createdTime</td><td>
 
-Indicates whether the file is in the trash or not.
+```ts
+createdAt(dates)
+```
+
+</td><td>
 
 ```js
-qb.isTrashed(true).build()
-//=> (trashed = true)
+createdAt('2023-01-01T00:00:00.000Z')
+//=> createdTime = '2023-01-01T00:00:00.000Z'
+createdAt(['2023-01-01T00:00:00.000Z', '2023-01-02T00:00:00.000Z'])
+//=> (createdTime = '2023-01-01T00:00:00.000Z' or createdTime = '2023-01-02T00:00:00.000Z')
+createdAt({
+  $eq: '2023-01-01T00:00:00.000Z',
+  $ne: ['2023-01-02T00:00:00.000Z', '2023-01-03T00:00:00.000Z'],
+  $lt: '2023-01-01T00:00:00.000Z',
+  $lte: '2023-01-01T00:00:00.000Z',
+  $gt: '2023-01-01T00:00:00.000Z',
+  $gte: '2023-01-01T00:00:00.000Z'
+})
+//=> createdTime = '2023-01-01T00:00:00.000Z' and (createdTime != '2023-01-02T00:00:00.000Z' or createdTime != '2023-01-03T00:00:00.000Z') and createdTime < '2023-01-01T00:00:00.000Z' and createdTime <= '2023-01-01T00:00:00.000Z' and createdTime > '2023-01-01T00:00:00.000Z' and createdTime >= '2023-01-01T00:00:00.000Z'
 ```
 
-#### isStarred(boolean)
+</td></tr>
+<tr><td>modifiedTime</td><td>
 
-Indicates whether the file is starred or not.
+```ts
+updatedAt(dates)
+```
+
+</td><td>
 
 ```js
-qb.isStarred(true).build()
-//=> (starred = true)
+updatedAt('2023-01-01T00:00:00.000Z')
+//=> modifiedTime = '2023-01-01T00:00:00.000Z'
+updatedAt(['2023-01-01T00:00:00.000Z', '2023-01-02T00:00:00.000Z'])
+//=> (modifiedTime = '2023-01-01T00:00:00.000Z' or modifiedTime = '2023-01-02T00:00:00.000Z')
+updatedAt({
+  $eq: '2023-01-01T00:00:00.000Z',
+  $ne: ['2023-01-02T00:00:00.000Z', '2023-01-03T00:00:00.000Z'],
+  $lt: '2023-01-01T00:00:00.000Z',
+  $lte: '2023-01-01T00:00:00.000Z',
+  $gt: '2023-01-01T00:00:00.000Z',
+  $gte: '2023-01-01T00:00:00.000Z'
+})
+//=> modifiedTime = '2023-01-01T00:00:00.000Z' and (modifiedTime != '2023-01-02T00:00:00.000Z' or modifiedTime != '2023-01-03T00:00:00.000Z') and modifiedTime < '2023-01-01T00:00:00.000Z' and modifiedTime <= '2023-01-01T00:00:00.000Z' and modifiedTime > '2023-01-01T00:00:00.000Z' and modifiedTime >= '2023-01-01T00:00:00.000Z'
+```
+  
+</td></tr>
+<tr><td>viewedByMeTime</td><td>❌</td><td>❌</td></tr>
+<tr><td>trashed</td><td>
+
+```ts
+trashed(bool?)
 ```
 
-#### isHidden(boolean)
-
-Indicates whether the shared drive is hidden or not.
+</td><td>
 
 ```js
-qb.isHidden(true).build()
-//=> (hidden = true)
+trashed()
+//=> trashed = true
+trashed(false)
+//=> trashed = false
 ```
 
-#### not()
+</td></tr>
+<tr><td>starred</td><td>
 
-Negate the immediately following input (query).
+```ts
+starred(bool?)
+```
+
+</td><td>
 
 ```js
-qb.not().getByCollection(Collection.PARENTS, 'parent-id').build()
-//=> not ('parent-id' in parents)
-
-qb.not().getByCollection(Collection.PARENTS, ['parent-1', 'parent-2']).build()
-//=> not ('parent-1' in parents or 'parent-2' in parents)
+starred()
+//=> starred = true
+starred(false)
+//=> starred = false
 ```
 
-#### build()
+</td></tr>
+<tr><td>hidden</td><td>
 
-Joins the inputs into a single string with the `and` operator.
+```ts
+hidden(bool?)
+```
+
+</td><td>
 
 ```js
-qb.getByCollection(Collection.PARENTS, 'parent-id')
-qb.getByFileName('something')
-
-qb.build()
-//=> ('parent-id' in parents) and (name = 'something')
+hidden()
+//=> hidden = true
+hidden(false)
+//=> hidden = false
 ```
+
+</td></tr>
+<tr><td>shortcutDetails.targetId</td><td>❌</td><td>❌</td></tr>
+<tr><td>memberCount</td><td>❌</td><td>❌</td></tr>
+<tr><td>orgUnitId</td><td>❌</td><td>❌</td></tr>
+<tr><td>organizerCount</td><td>❌</td><td>❌</td></tr>
+</tbody>
+</table>
 
 ## Copyright & License
 

@@ -7,7 +7,7 @@ import {
 import type {
   AddQueryOptions,
   CollectionMapping,
-  DateMapping,
+  ComparisonMapping,
   FileNameMapping,
   FileTypeMapping,
   OperatorKeyMapping,
@@ -128,7 +128,7 @@ class QueryBuilder {
     return this
   }
 
-  createdAt(dates: string | string[] | DateMapping): QueryBuilder {
+  createdAt(dates: string | string[] | ComparisonMapping): QueryBuilder {
     this.addQuery(QueryType.STRING, {
       field: FileProperty.CREATED_TIME,
       defOperator: Operator.EQUAL,
@@ -137,7 +137,7 @@ class QueryBuilder {
     return this
   }
 
-  updatedAt(dates: string | string[] | DateMapping): QueryBuilder {
+  updatedAt(dates: string | string[] | ComparisonMapping): QueryBuilder {
     this.addQuery(QueryType.STRING, {
       field: FileProperty.MODIFIED_TIME,
       defOperator: Operator.EQUAL,
@@ -146,7 +146,7 @@ class QueryBuilder {
     return this
   }
 
-  viewedAt(dates: string | string[] | DateMapping): QueryBuilder {
+  viewedAt(dates: string | string[] | ComparisonMapping): QueryBuilder {
     this.addQuery(QueryType.STRING, {
       field: FileProperty.VIEWED_BY_ME_TIME,
       defOperator: Operator.EQUAL,

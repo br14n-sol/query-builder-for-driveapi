@@ -21,9 +21,10 @@ type FileTypeOperators =
 type VisibilityOperators = OperatorKey.EQUAL | OperatorKey.NOT_EQUAL
 
 /**
- * Common operators for createdAt, updatedAt and viewedAt methods
+ * Common operators for createdAt, updatedAt, viewedAt,
+ * organizerCount and memberCount methods
  */
-type DateOperators =
+type ComparisonOperators =
   | OperatorKey.EQUAL
   | OperatorKey.NOT_EQUAL
   | OperatorKey.LESS_THAN
@@ -53,9 +54,13 @@ export type VisibilityMapping = PartialRecord<
 >
 
 /**
- * Common mapping with operators for createdAt, updatedAt and viewedAt methods
+ * Common mapping with operators for createdAt, updatedAt, viewedAt,
+ * organizerCount and memberCount methods
  */
-export type DateMapping = PartialRecord<DateOperators, string | string[]>
+export type ComparisonMapping = PartialRecord<
+  ComparisonOperators,
+  string | string[]
+>
 
 export type ShortcutTargetIdMapping = PartialRecord<
   ShortcutTargetIdOperators,

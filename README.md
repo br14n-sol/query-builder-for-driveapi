@@ -351,6 +351,33 @@ starred(false)
 ```
 
 </td></tr>
+<tr><td>orgUnitId</td><td>❌</td><td>❌</td></tr>
+<tr><td>organizerCount</td><td>
+
+```ts
+organizerCount(counts)
+```
+
+</td><td>
+
+```ts
+organizerCount('123')
+//=> organizerCount = '123'
+organizerCount(['123', '678'])
+//=> (organizerCount = '123' or organizerCount = '678')
+organizerCount({
+  $eq: '123',
+  $ne: ['67890', '12345-2'],
+  $lt: '586',
+  $lte: '986',
+  $gt: '145',
+  $gte: '265'
+})
+//=> organizerCount = '123' and (organizerCount != '67890' or organizerCount != '12345-2') and organizerCount < '586' and organizerCount <= '986' and organizerCount > '145' and organizerCount >= '265'
+```
+
+</td></tr>
+<tr><td>memberCount</td><td>❌</td><td>❌</td></tr>
 <tr><td>hidden</td><td>
 
 ```ts
@@ -367,9 +394,6 @@ hidden(false)
 ```
 
 </td></tr>
-<tr><td>memberCount</td><td>❌</td><td>❌</td></tr>
-<tr><td>orgUnitId</td><td>❌</td><td>❌</td></tr>
-<tr><td>organizerCount</td><td>❌</td><td>❌</td></tr>
 </tbody>
 </table>
 

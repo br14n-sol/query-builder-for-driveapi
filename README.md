@@ -55,16 +55,10 @@ const query = qb.build()
 
 <table>
 <thead>
-<tr><th>Collection</th><th>Method</th><th>Sample</th></tr>
+<tr><th align='left'>Collection</th><th align='left'>Sample</th></tr>
 </thead>
 <tbody>
 <tr><td>parents</td><td rowspan="4">
-
-```ts
-collection(collections)
-```
-
-</td><td rowspan="4">
 
 ```ts
 collection({ parents: '12345' })
@@ -89,16 +83,10 @@ collection({
 
 <table>
 <thead>
-<tr><th>Field</th><th>Method</th><th>Sample</th></tr>
+<tr><th align='left'>Field</th><th align='left'>Sample</th></tr>
 </thead>
 <tbody>
 <tr><td>name</td><td>
-
-```ts
-fileName(names)
-```
-
-</td><td>
 
 ```ts
 fileName('test.txt')
@@ -117,12 +105,6 @@ fileName({
 <tr><td>fullText</td><td>
 
 ```ts
-content(inputs)
-```
-
-</td><td>
-
-```ts
 content('some-content')
 //=> fullText = 'some-content'
 content(['some-content', 'some-other-content'])
@@ -131,12 +113,6 @@ content(['some-content', 'some-other-content'])
 
 </td></tr>
 <tr><td>mimeType</td><td>
-
-```ts
-fileType(types)
-```
-
-</td><td>
 
 ```ts
 fileType('image/png')
@@ -155,12 +131,6 @@ fileType({
 <tr><td>visibility</td><td>
 
 ```ts
-visibility(levels)
-```
-
-</td><td>
-
-```ts
 visibility('limited')
 //=> visibility = 'limited'
 visibility(['limited', 'public'])
@@ -176,12 +146,6 @@ visibility({
 <tr><td>properties</td><td>
 
 ```ts
-property(props)
-```
-
-</td><td>
-
-```ts
 property({
   prop: 'value',
   prop2: [123, 'value-2', true]
@@ -193,12 +157,6 @@ property({
 <tr><td>appProperties</td><td>
 
 ```ts
-appProperty(props)
-```
-
-</td><td>
-
-```ts
 appProperty({
   prop: 'value',
   prop2: [123, 'value-2', true]
@@ -208,12 +166,6 @@ appProperty({
 
 </td></tr>
 <tr><td>createdTime</td><td>
-
-```ts
-createdAt(dates)
-```
-
-</td><td>
 
 ```ts
 createdAt('2023-01-01T00:00:00.000Z')
@@ -235,12 +187,6 @@ createdAt({
 <tr><td>modifiedTime</td><td>
 
 ```ts
-updatedAt(dates)
-```
-
-</td><td>
-
-```ts
 updatedAt('2023-01-01T00:00:00.000Z')
 //=> modifiedTime = '2023-01-01T00:00:00.000Z'
 updatedAt(['2023-01-01T00:00:00.000Z', '2023-01-02T00:00:00.000Z'])
@@ -258,12 +204,6 @@ updatedAt({
   
 </td></tr>
 <tr><td>viewedByMeTime</td><td>
-
-```ts
-viewedAt(dates)
-```
-
-</td><td>
 
 ```ts
 viewedAt('2023-01-01T00:00:00.000Z')
@@ -285,12 +225,6 @@ viewedAt({
 <tr><td>shortcutDetails.targetId</td><td>
 
 ```ts
-shortcutTargetId(ids)
-```
-
-</td><td>
-
-```ts
 shortcutTargetId('12345')
 //=> shortcutDetails.targetId = '12345'
 shortcutTargetId(['12345', '67890'])
@@ -306,12 +240,6 @@ shortcutTargetId({
 <tr><td>sharedWithMe</td><td>
 
 ```ts
-shared(bool?)
-```
-
-</td><td>
-
-```ts
 shared()
 //=> sharedWithMe = true
 shared(false)
@@ -320,12 +248,6 @@ shared(false)
 
 </td></tr>
 <tr><td>trashed</td><td>
-
-```ts
-trashed(bool?)
-```
-
-</td><td>
 
 ```ts
 trashed()
@@ -338,12 +260,6 @@ trashed(false)
 <tr><td>starred</td><td>
 
 ```ts
-starred(bool?)
-```
-
-</td><td>
-
-```ts
 starred()
 //=> starred = true
 starred(false)
@@ -352,12 +268,6 @@ starred(false)
 
 </td></tr>
 <tr><td>orgUnitId</td><td>
-
-```ts
-orgDriveId(ids)
-```
-
-</td><td>
 
 ```ts
 orgDriveId('12345')
@@ -373,12 +283,6 @@ orgDriveId({
 
 </td></tr>
 <tr><td>organizerCount</td><td>
-
-```ts
-organizerCount(counts)
-```
-
-</td><td>
 
 ```ts
 organizerCount('123')
@@ -400,12 +304,6 @@ organizerCount({
 <tr><td>memberCount</td><td>
 
 ```ts
-memberCount(counts)
-```
-
-</td><td>
-
-```ts
 memberCount('123')
 //=> memberCount = '123'
 memberCount(['123', '678'])
@@ -423,12 +321,6 @@ memberCount({
 
 </td></tr>
 <tr><td>hidden</td><td>
-
-```ts
-hidden(bool?)
-```
-
-</td><td>
 
 ```ts
 hidden()

@@ -84,7 +84,7 @@ collection({
 <tr><th align='left'>Field</th><th align='left'>Supported Operators</th><th align='left'>Method</th></tr>
 </thead>
 <tbody>
-<tr><td>name</td><td>
+<tr><td>name</td><td rowspan="2">
 
 - Equal to (=): `$eq`
 - Not equal to (≠): `$ne`
@@ -95,6 +95,16 @@ collection({
 ```ts
 fileName(string | string[])
 fileName({
+  [K in Operator]?: string | string[]
+})
+```
+
+</td></tr>
+<tr><td>mimeType</td><td>
+
+```ts
+fileType(string | string[])
+fileType({
   [K in Operator]?: string | string[]
 })
 ```
@@ -111,38 +121,7 @@ content(string | string[])
 ```
 
 </td></tr>
-<tr><td>mimeType</td><td>
-
-- Equal to (=): `$eq`
-- Not equal to (≠): `$ne`
-- Contains (⊇): `$contains`
-
-</td><td>
-
-```ts
-fileType(string | string[])
-fileType({
-  [K in Operator]?: string | string[]
-})
-```
-
-</td></tr>
-<tr><td>visibility</td><td>
-
-- Equal to (=): `$eq`
-- Not equal to (≠): `$ne`
-
-</td><td>
-
-```ts
-visibility(string | string[])
-visibility({
-  [K in Operator]?: string | string[]
-})
-```
-
-</td></tr>
-<tr><td>properties</td><td>
+<tr><td>properties</td><td rowspan="2">
 
 - Has (∋)
 
@@ -157,10 +136,6 @@ property({
 </td></tr>
 <tr><td>appProperties</td><td>
 
-- Has (∋)
-
-</td><td>
-
 ```ts
 appProperty({
   [K in string]: string | string[]
@@ -168,7 +143,74 @@ appProperty({
 ```
 
 </td></tr>
-<tr><td>createdTime</td><td>
+<tr><td>visibility</td><td rowspan="3">
+
+- Equal to (=): `$eq`
+- Not equal to (≠): `$ne`
+
+</td><td>
+
+```ts
+visibility(string | string[])
+visibility({
+  [K in Operator]?: string | string[]
+})
+```
+
+</td></tr>
+<tr><td>shortcutDetails.targetId</td><td>
+
+```ts
+shortcutTargetId(string | string[])
+shortcutTargetId({
+  [K in Operator]?: string | string[]
+})
+```
+
+</td></tr>
+<tr><td>orgUnitId</td><td>
+
+```ts
+orgDriveId(string | string[])
+orgDriveId({
+  [K in Operator]?: string | string[]
+})
+```
+
+</td></tr>
+<tr><td>sharedWithMe</td><td rowspan="4">
+
+- Equal to (=)
+
+</td><td>
+
+```ts
+shared(boolean?) // default: true
+```
+
+</td></tr>
+<tr><td>trashed</td><td>
+
+```ts
+trashed(boolean?) // default: true
+```
+
+</td></tr>
+<tr><td>starred</td><td>
+
+```ts
+starred(boolean?) // default: true
+```
+
+</td></tr>
+<tr><td>hidden</td><td>
+
+```ts
+hidden(boolean?) // default: true
+```
+
+</td></tr>
+<tr><td>createdTime</td><td rowspan="5">
 
 - Equal to (=): `$eq`
 - Not equal to (≠): `$ne`
@@ -189,15 +231,6 @@ createdAt({
 </td></tr>
 <tr><td>modifiedTime</td><td>
 
-- Equal to (=): `$eq`
-- Not equal to (≠): `$ne`
-- Less than (<): `$lt`
-- Less than or equal to (≤): `$lte`
-- Greater than (>): `$gt`
-- Greater than or equal to (≥): `$gte`
-
-</td><td>
-
 ```ts
 updatedAt(string | string[])
 updatedAt({
@@ -208,15 +241,6 @@ updatedAt({
 </td></tr>
 <tr><td>viewedByMeTime</td><td>
 
-- Equal to (=): `$eq`
-- Not equal to (≠): `$ne`
-- Less than (<): `$lt`
-- Less than or equal to (≤): `$lte`
-- Greater than (>): `$gt`
-- Greater than or equal to (≥): `$gte`
-
-</td><td>
-
 ```ts
 viewedAt(string | string[])
 viewedAt({
@@ -225,79 +249,7 @@ viewedAt({
 ```
 
 </td></tr>
-<tr><td>shortcutDetails.targetId</td><td>
-
-- Equal to (=): `$eq`
-- Not equal to (≠): `$ne`
-
-</td><td>
-
-```ts
-shortcutTargetId(string | string[])
-shortcutTargetId({
-  [K in Operator]?: string | string[]
-})
-```
-
-</td></tr>
-<tr><td>sharedWithMe</td><td>
-
-- Equal to (=)
-
-</td><td>
-
-```ts
-shared(boolean?) // default: true
-```
-
-</td></tr>
-<tr><td>trashed</td><td>
-
-- Equal to (=)
-
-</td><td>
-
-```ts
-trashed(boolean?) // default: true
-```
-
-</td></tr>
-<tr><td>starred</td><td>
-
-- Equal to (=)
-
-</td><td>
-
-```ts
-starred(boolean?) // default: true
-```
-
-</td></tr>
-<tr><td>orgUnitId</td><td>
-
-- Equal to (=): `$eq`
-- Not equal to (≠): `$ne`
-
-</td><td>
-
-```ts
-orgDriveId(string | string[])
-orgDriveId({
-  [K in Operator]?: string | string[]
-})
-```
-
-</td></tr>
 <tr><td>organizerCount</td><td>
-
-- Equal to (=): `$eq`
-- Not equal to (≠): `$ne`
-- Less than (<): `$lt`
-- Less than or equal to (≤): `$lte`
-- Greater than (>): `$gt`
-- Greater than or equal to (≥): `$gte`
-
-</td><td>
 
 ```ts
 organizerCount(string | string[])
@@ -309,31 +261,11 @@ organizerCount({
 </td></tr>
 <tr><td>memberCount</td><td>
 
-- Equal to (=): `$eq`
-- Not equal to (≠): `$ne`
-- Less than (<): `$lt`
-- Less than or equal to (≤): `$lte`
-- Greater than (>): `$gt`
-- Greater than or equal to (≥): `$gte`
-
-</td><td>
-
 ```ts
 memberCount(string | string[])
 memberCount({
   [K in Operator]?: string | string[]
 })
-```
-
-</td></tr>
-<tr><td>hidden</td><td>
-
-- Equal to (=)
-
-</td><td>
-
-```ts
-hidden(boolean?) // default: true
 ```
 
 </td></tr>

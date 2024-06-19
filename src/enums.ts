@@ -77,6 +77,7 @@ export enum FileType {
 export enum QueryType {
   COLLECTION = 0,
   STRING = 1,
-  BOOLEAN = 2,
-  HASH = 3
+  NUMBER = 2,
+  BOOLEAN = 3,
+  HASH = 4
 }

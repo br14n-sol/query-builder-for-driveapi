@@ -62,6 +62,7 @@ export function generateQuery(
   return {
     [QueryType.COLLECTION]: `'${value}' ${operator} ${field}`,
     [QueryType.STRING]: `${field} ${operator} '${value}'`,
+    [QueryType.NUMBER]: `${field} ${operator} ${value}`,
     [QueryType.BOOLEAN]: `${field} ${operator} ${value}`,
     [QueryType.HASH]: `${field} ${operator} { key='${key}' and value='${value}' }`
   }[type]

@@ -202,7 +202,7 @@ class QueryBuilder {
   }
 
   organizerCount(counts: string | string[] | ComparisonMapping): QueryBuilder {
-    this.addQuery(QueryType.STRING, {
+    this.addQuery(QueryType.NUMBER, {
       field: SharedDriveProperty.ORGANIZER_COUNT,
       defOperator: Operator.EQUAL,
       entry: counts
@@ -211,7 +211,7 @@ class QueryBuilder {
   }
 
   memberCount(counts: string | string[] | ComparisonMapping): QueryBuilder {
-    this.addQuery(QueryType.STRING, {
+    this.addQuery(QueryType.NUMBER, {
       field: SharedDriveProperty.MEMBER_COUNT,
       defOperator: Operator.EQUAL,
       entry: counts

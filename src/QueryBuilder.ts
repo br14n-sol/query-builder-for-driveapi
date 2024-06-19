@@ -229,7 +229,8 @@ class QueryBuilder {
   }
 
   build(): string {
-    // TODO: Add trashed = false to query if trashed is not specified.
+    const hasTrashed = this.queries.some(query => query.includes('trashed'))
+    !hasTrashed && this.trashed(false)
     return this.queries.join(` ${Operator.AND} `)
   }
 }

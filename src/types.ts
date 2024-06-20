@@ -37,7 +37,10 @@ type ShortcutTargetIdOperators = OperatorKey.EQUAL | OperatorKey.NOT_EQUAL
 
 type OrgDriveIdOperators = OperatorKey.EQUAL | OperatorKey.NOT_EQUAL
 
-export type OperatorKeyMapping = PartialRecord<OperatorKey, string | string[]>
+export type OperatorKeyMapping = PartialRecord<
+  OperatorKey,
+  string | string[] | number | number[]
+>
 
 export type CollectionMapping = PartialRecord<Collection, string | string[]>
 
@@ -60,10 +63,7 @@ export type VisibilityMapping = PartialRecord<
  * Common mapping with operators for createdAt, updatedAt, viewedAt,
  * organizerCount and memberCount methods
  */
-export type ComparisonMapping = PartialRecord<
-  ComparisonOperators,
-  string | string[]
->
+export type ComparisonMapping<T> = PartialRecord<ComparisonOperators, T | T[]>
 
 export type ShortcutTargetIdMapping = PartialRecord<
   ShortcutTargetIdOperators,
@@ -89,5 +89,11 @@ export type QueryTemplateOptions = {
 export type AddQueryOptions = {
   field: Field
   defOperator: Operator
-  entry: string | string[] | Record<string, unknown> | OperatorKeyMapping
+  entry:
+    | string
+    | string[]
+    | number
+    | number[]
+    | Record<string, unknown>
+    | OperatorKeyMapping
 }

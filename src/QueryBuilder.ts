@@ -127,7 +127,9 @@ class QueryBuilder {
     return this
   }
 
-  createdAt(dates: string | string[] | ComparisonMapping): QueryBuilder {
+  createdAt(
+    dates: string | string[] | ComparisonMapping<string>
+  ): QueryBuilder {
     this.addQuery(QueryType.STRING, {
       field: FileProperty.CREATED_TIME,
       defOperator: Operator.EQUAL,
@@ -136,7 +138,9 @@ class QueryBuilder {
     return this
   }
 
-  updatedAt(dates: string | string[] | ComparisonMapping): QueryBuilder {
+  updatedAt(
+    dates: string | string[] | ComparisonMapping<string>
+  ): QueryBuilder {
     this.addQuery(QueryType.STRING, {
       field: FileProperty.MODIFIED_TIME,
       defOperator: Operator.EQUAL,
@@ -145,7 +149,7 @@ class QueryBuilder {
     return this
   }
 
-  viewedAt(dates: string | string[] | ComparisonMapping): QueryBuilder {
+  viewedAt(dates: string | string[] | ComparisonMapping<string>): QueryBuilder {
     this.addQuery(QueryType.STRING, {
       field: FileProperty.VIEWED_BY_ME_TIME,
       defOperator: Operator.EQUAL,
@@ -201,7 +205,9 @@ class QueryBuilder {
     return this
   }
 
-  organizerCount(counts: string | string[] | ComparisonMapping): QueryBuilder {
+  organizerCount(
+    counts: number | number[] | ComparisonMapping<number>
+  ): QueryBuilder {
     this.addQuery(QueryType.NUMBER, {
       field: SharedDriveProperty.ORGANIZER_COUNT,
       defOperator: Operator.EQUAL,
@@ -210,7 +216,9 @@ class QueryBuilder {
     return this
   }
 
-  memberCount(counts: string | string[] | ComparisonMapping): QueryBuilder {
+  memberCount(
+    counts: number | number[] | ComparisonMapping<number>
+  ): QueryBuilder {
     this.addQuery(QueryType.NUMBER, {
       field: SharedDriveProperty.MEMBER_COUNT,
       defOperator: Operator.EQUAL,

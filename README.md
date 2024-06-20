@@ -129,7 +129,7 @@ content(string | string[])
 
 ```ts
 property({
-  [K in string]: string | string[]
+  [K in string]: unknown | unknown[]
 })
 ```
 
@@ -138,7 +138,7 @@ property({
 
 ```ts
 appProperty({
-  [K in string]: string | string[]
+  [K in string]: unknown | unknown[]
 })
 ```
 
@@ -252,9 +252,9 @@ viewedAt({
 <tr><td>organizerCount</td><td>
 
 ```ts
-organizerCount(string | string[])
+organizerCount(number | number[])
 organizerCount({
-  [K in Operator]?: string | string[]
+  [K in Operator]?: number | number[]
 })
 ```
 
@@ -262,9 +262,9 @@ organizerCount({
 <tr><td>memberCount</td><td>
 
 ```ts
-memberCount(string | string[])
+memberCount(number | number[])
 memberCount({
-  [K in Operator]?: string | string[]
+  [K in Operator]?: number | number[]
 })
 ```
 

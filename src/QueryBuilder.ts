@@ -7,14 +7,14 @@ import {
 } from './enums.js'
 import type {
   AddQueryOptions,
-  CollectionMapping,
-  ComparisonMapping,
-  FileNameMapping,
-  FileTypeMapping,
-  OperatorKeyMapping,
-  OrgDriveIdMapping,
-  ShortcutTargetIdMapping,
-  VisibilityMapping
+  CollectionMap,
+  ComparisonOpMap,
+  FileNameOpMap,
+  FileTypeOpMap,
+  OpKeyMap,
+  OrgDriveIdOpMap,
+  ShortcutTargetIdOpMap,
+  VisibilityOpMap
 } from './types.js'
 import * as utils from './utils.js'
 
@@ -22,7 +22,7 @@ class QueryBuilder {
   private readonly queries: string[] = []
 
   private addQuery(type: QueryType, options: AddQueryOptions): void {
-    let entries: OperatorKeyMapping | Record<string, unknown | unknown[]> = {}
+    let entries: OpKeyMap | Record<string, unknown | unknown[]> = {}
 
     // Handle string and array entries.
     if (!utils.isObject(options.entry)) {
@@ -60,7 +60,7 @@ class QueryBuilder {
 
   // TODO: Add alternative to negate query.
 
-  collection(collections: CollectionMapping): QueryBuilder {
+  collection(collections: CollectionMap): QueryBuilder {
     for (const [collection, entries] of utils.objectEntries(collections)) {
       this.addQuery(QueryType.COLLECTION, {
         field: collection,
@@ -71,7 +71,7 @@ class QueryBuilder {
     return this
   }
 
-  fileName(names: string | string[] | FileNameMapping): QueryBuilder {
+  fileName(names: string | string[] | FileNameOpMap): QueryBuilder {
     this.addQuery(QueryType.STRING, {
       field: FileProperty.NAME,
       defOperator: Operator.EQUAL,
@@ -89,7 +89,7 @@ class QueryBuilder {
     return this
   }
 
-  fileType(types: string | string[] | FileTypeMapping): QueryBuilder {
+  fileType(types: string | string[] | FileTypeOpMap): QueryBuilder {
     this.addQuery(QueryType.STRING, {
       field: FileProperty.MIME_TYPE,
       defOperator: Operator.EQUAL,
@@ -99,7 +99,7 @@ class QueryBuilder {
   }
 
   visibility(
-    levels: VisibilityLevel | VisibilityLevel[] | VisibilityMapping
+    levels: VisibilityLevel | VisibilityLevel[] | VisibilityOpMap
   ): QueryBuilder {
     this.addQuery(QueryType.STRING, {
       field: FileProperty.VISIBILITY,
@@ -127,9 +127,7 @@ class QueryBuilder {
     return this
   }
 
-  createdAt(
-    dates: string | string[] | ComparisonMapping<string>
-  ): QueryBuilder {
+  createdAt(dates: string | string[] | ComparisonOpMap<string>): QueryBuilder {
     this.addQuery(QueryType.STRING, {
       field: FileProperty.CREATED_TIME,
       defOperator: Operator.EQUAL,
@@ -138,9 +136,7 @@ class QueryBuilder {
     return this
   }
 
-  updatedAt(
-    dates: string | string[] | ComparisonMapping<string>
-  ): QueryBuilder {
+  updatedAt(dates: string | string[] | ComparisonOpMap<string>): QueryBuilder {
     this.addQuery(QueryType.STRING, {
       field: FileProperty.MODIFIED_TIME,
       defOperator: Operator.EQUAL,
@@ -149,7 +145,7 @@ class QueryBuilder {
     return this
   }
 
-  viewedAt(dates: string | string[] | ComparisonMapping<string>): QueryBuilder {
+  viewedAt(dates: string | string[] | ComparisonOpMap<string>): QueryBuilder {
     this.addQuery(QueryType.STRING, {
       field: FileProperty.VIEWED_BY_ME_TIME,
       defOperator: Operator.EQUAL,
@@ -159,7 +155,7 @@ class QueryBuilder {
   }
 
   shortcutTargetId(
-    ids: string | string[] | ShortcutTargetIdMapping
+    ids: string | string[] | ShortcutTargetIdOpMap
   ): QueryBuilder {
     this.addQuery(QueryType.STRING, {
       field: FileProperty.SHORTCUT_TARGET_ID,
@@ -196,7 +192,7 @@ class QueryBuilder {
     return this
   }
 
-  orgDriveId(ids: string | string[] | OrgDriveIdMapping): QueryBuilder {
+  orgDriveId(ids: string | string[] | OrgDriveIdOpMap): QueryBuilder {
     this.addQuery(QueryType.STRING, {
       field: SharedDriveProperty.ORG_UNIT_ID,
       defOperator: Operator.EQUAL,
@@ -206,7 +202,7 @@ class QueryBuilder {
   }
 
   organizerCount(
-    counts: number | number[] | ComparisonMapping<number>
+    counts: number | number[] | ComparisonOpMap<number>
   ): QueryBuilder {
     this.addQuery(QueryType.NUMBER, {
       field: SharedDriveProperty.ORGANIZER_COUNT,
@@ -217,7 +213,7 @@ class QueryBuilder {
   }
 
   memberCount(
-    counts: number | number[] | ComparisonMapping<number>
+    counts: number | number[] | ComparisonOpMap<number>
   ): QueryBuilder {
     this.addQuery(QueryType.NUMBER, {
       field: SharedDriveProperty.MEMBER_COUNT,

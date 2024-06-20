@@ -9,53 +9,30 @@ import type {
 
 type PartialRecord<K extends PropertyKey, T> = Partial<Record<K, T>>
 
-type FileNameOperators =
-  | OperatorKey.EQUAL
-  | OperatorKey.NOT_EQUAL
-  | OperatorKey.CONTAINS
+type EqualityOps = OperatorKey.EQUAL | OperatorKey.NOT_EQUAL
 
-type FileTypeOperators =
-  | OperatorKey.EQUAL
-  | OperatorKey.NOT_EQUAL
-  | OperatorKey.CONTAINS
+type StringOps = EqualityOps | OperatorKey.CONTAINS
 
-type VisibilityOperators = OperatorKey.EQUAL | OperatorKey.NOT_EQUAL
-
-/**
- * Common operators for createdAt, updatedAt, viewedAt,
- * organizerCount and memberCount methods
- */
-type ComparisonOperators =
-  | OperatorKey.EQUAL
-  | OperatorKey.NOT_EQUAL
+type ComparisonOps =
+  | EqualityOps
   | OperatorKey.LESS_THAN
   | OperatorKey.LESS_THAN_OR_EQUAL
   | OperatorKey.GREATER_THAN
   | OperatorKey.GREATER_THAN_OR_EQUAL
 
-type ShortcutTargetIdOperators = OperatorKey.EQUAL | OperatorKey.NOT_EQUAL
-
-type OrgDriveIdOperators = OperatorKey.EQUAL | OperatorKey.NOT_EQUAL
-
-export type OperatorKeyMapping = PartialRecord<
+export type OpKeyMap = PartialRecord<
   OperatorKey,
-  string | string[] | number | number[]
+  string | number | (string | number)[]
 >
 
-export type CollectionMapping = PartialRecord<Collection, string | string[]>
+export type CollectionMap = PartialRecord<Collection, string | string[]>
 
-export type FileNameMapping = PartialRecord<
-  FileNameOperators,
-  string | string[]
->
+export type FileNameOpMap = PartialRecord<StringOps, string | string[]>
 
-export type FileTypeMapping = PartialRecord<
-  FileTypeOperators,
-  string | string[]
->
+export type FileTypeOpMap = PartialRecord<StringOps, string | string[]>
 
-export type VisibilityMapping = PartialRecord<
-  VisibilityOperators,
+export type VisibilityOpMap = PartialRecord<
+  EqualityOps,
   VisibilityLevel | VisibilityLevel[]
 >
 
@@ -63,17 +40,14 @@ export type VisibilityMapping = PartialRecord<
  * Common mapping with operators for createdAt, updatedAt, viewedAt,
  * organizerCount and memberCount methods
  */
-export type ComparisonMapping<T> = PartialRecord<ComparisonOperators, T | T[]>
+export type ComparisonOpMap<T> = PartialRecord<ComparisonOps, T | T[]>
 
-export type ShortcutTargetIdMapping = PartialRecord<
-  ShortcutTargetIdOperators,
+export type ShortcutTargetIdOpMap = PartialRecord<
+  EqualityOps,
   string | string[]
 >
 
-export type OrgDriveIdMapping = PartialRecord<
-  OrgDriveIdOperators,
-  string | string[]
->
+export type OrgDriveIdOpMap = PartialRecord<EqualityOps, string | string[]>
 
 type Field = Collection | FileProperty | SharedDriveProperty
 
@@ -91,9 +65,8 @@ export type AddQueryOptions = {
   defOperator: Operator
   entry:
     | string
-    | string[]
     | number
-    | number[]
-    | Record<string, unknown>
-    | OperatorKeyMapping
+    | (string | number)[]
+    | Record<string, unknown | unknown[]>
+    | OpKeyMap
 }

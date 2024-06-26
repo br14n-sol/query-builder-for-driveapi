@@ -1,24 +1,24 @@
-name: Github Release and NPM Publish
-
 on:
   push:
     branches:
       - main
 
+permissions:
+  contents: write # to create release commit (googleapis/release-please-action)
+  pull-requests: write # to create release PR (googleapis/release-please-action)
+
+name: release-please
+
 jobs:
   release:
     name: Github Release
-    permissions:
-      contents: write # to create release commit (google-github-actions/release-please-action)
-      pull-requests: write # to create release PR (google-github-actions/release-please-action)
-
     runs-on: ubuntu-latest
     outputs:
       release_created: ${{ steps.release.outputs.release_created }}
 
     steps:
       - id: release
-        uses: google-github-actions/release-please-action@v4
+        uses: googleapis/release-please-action@v4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           release-type: node
@@ -34,10 +34,10 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: Setup Node.js 20.x
+      - name: Setup Node.js 18.x.x
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 18
           registry-url: https://registry.npmjs.org/
       
       - name: Install Dependencies

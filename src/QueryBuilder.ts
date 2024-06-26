@@ -64,14 +64,12 @@ class QueryBuilder {
     }
   }
 
-  negate(
-    cb: (builder: Omit<QueryBuilder, 'negate' | 'build'>) => void
-  ): QueryBuilder {
-    // Change negate state to true for the callback.
+  negate(cb: () => void): QueryBuilder {
+    // Change negate state to true before calling callback.
     this.negateNextQuery = true
 
     // Call callback.
-    cb(this)
+    cb()
 
     // Reset negate state to false.
     this.negateNextQuery = false

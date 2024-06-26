@@ -8,9 +8,10 @@
 
 <div align="center">
 
-  ![license](https://img.shields.io/npm/l/query-builder-for-driveapi?color=blue)
+  ![license](https://img.shields.io/npm/l/query-builder-for-driveapi)
   ![node-current](https://img.shields.io/node/v/query-builder-for-driveapi?color=darkgreen)
   ![version](https://img.shields.io/npm/v/query-builder-for-driveapi?color=orange)
+  ![unpacked-size](https://img.shields.io/npm/unpacked-size/query-builder-for-driveapi)
   ![downloads](https://img.shields.io/npm/dt/query-builder-for-driveapi.svg)
 
 </div>
@@ -51,18 +52,14 @@ const query = qb.build()
 > To avoid "accidents", the `build()` method adds a `trashed = false` to the query by default. <br>
 > <b>Note: If you want to change this behavior in your query, simply call the `trashed()` method before calling the `build()` method.</b>
 
-## Supported Collections
+## Method for Collections
 
 <table>
 <thead>
-<tr><th align='left'>Collection</th><th align='left'>Supported Operators</th><th align='left'>Method</th></tr>
+<tr><th align='left'>Collection</th><th align='left'>Method</th></tr>
 </thead>
 <tbody>
 <tr><td>parents</td><td rowspan="4">
-
-- In (∈)
-
-</td><td rowspan="4">
 
 ```ts
 collection({
@@ -77,11 +74,11 @@ collection({
 </tbody>
 </table>
 
-## Supported fields
+## Methods for fields
 
 <table>
 <thead>
-<tr><th align='left'>Field</th><th align='left'>Supported Operators</th><th align='left'>Method</th></tr>
+<tr><th align='left'>Field</th><th align='left'>Operator (if applicable)</th><th align='left'>Method</th></tr>
 </thead>
 <tbody>
 <tr><td>name</td><td rowspan="2">
@@ -110,22 +107,14 @@ fileType({
 ```
 
 </td></tr>
-<tr><td>fullText</td><td>
-
-- Contains (⊇)
-
-</td><td>
+<tr><td>fullText</td><td></td><td>
 
 ```ts
 content(string | string[])
 ```
 
 </td></tr>
-<tr><td>properties</td><td rowspan="2">
-
-- Has (∋)
-
-</td><td>
+<tr><td>properties</td><td></td><td>
 
 ```ts
 property({
@@ -134,7 +123,7 @@ property({
 ```
 
 </td></tr>
-<tr><td>appProperties</td><td>
+<tr><td>appProperties</td><td></td><td>
 
 ```ts
 appProperty({
@@ -178,32 +167,28 @@ orgDriveId({
 ```
 
 </td></tr>
-<tr><td>sharedWithMe</td><td rowspan="4">
-
-- Equal to (=)
-
-</td><td>
+<tr><td>sharedWithMe</td><td></td><td>
 
 ```ts
 shared(boolean?) // default: true
 ```
 
 </td></tr>
-<tr><td>trashed</td><td>
+<tr><td>trashed</td><td></td><td>
 
 ```ts
 trashed(boolean?) // default: true
 ```
 
 </td></tr>
-<tr><td>starred</td><td>
+<tr><td>starred</td><td></td><td>
 
 ```ts
 starred(boolean?) // default: true
 ```
 
 </td></tr>
-<tr><td>hidden</td><td>
+<tr><td>hidden</td><td></td><td>
 
 ```ts
 hidden(boolean?) // default: true
@@ -266,6 +251,51 @@ memberCount(number | number[])
 memberCount({
   [K in Operator]?: number | number[]
 })
+```
+
+</td></tr>
+</tbody>
+</table>
+
+## Other Methods
+
+<table>
+<thead>
+<tr><th align='left'>Method</th><th align='left'>Sample</th></tr>
+</thead>
+<tbody>
+<tr><td>
+
+```ts
+negate(() => void)
+```
+
+</td><td rowspan="2">
+
+```ts
+const qb = new QueryBuilder()
+
+// negates the queries in the callback
+qb.negate(() => {
+  qb.fileName('test.txt')
+  qb.createdAt('2023-01-01')
+})
+
+qb.content('some content')
+
+qb.build()
+//=> not name = 'test.txt'
+//      and not createdTime = '2023-01-01'
+//      and fullText = 'some content'
+//      and trashed = false
+
+```
+
+</td></tr>
+<tr><td>
+
+```ts
+build()
 ```
 
 </td></tr>

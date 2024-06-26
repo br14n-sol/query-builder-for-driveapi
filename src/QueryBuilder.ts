@@ -20,6 +20,7 @@ import * as utils from './utils.js'
 
 class QueryBuilder {
   private readonly queries: string[] = []
+  private negateNextQuery = false
 
   private addQuery(type: QueryType, options: AddQueryOptions): void {
     let entries: OpKeyMap | Record<string, unknown | unknown[]> = {}
@@ -49,16 +50,33 @@ class QueryBuilder {
       // Join queries with OR operator.
       // If there is only one query, return it directly.
       // Otherwise, return parenthesised query.
-      const query =
+      let query =
         queries.length > 1
           ? `(${queries.join(` ${Operator.OR} `)})`
           : queries.at(0) || ''
+
+      // Negate next query if negateNextQuery is true.
+      if (this.negateNextQuery) {
+        query = `not ${query}`
+      }
 
       this.queries.push(query)
     }
   }
 
-  // TODO: Add alternative to negate query.
+  negate(
+    cb: (builder: Omit<QueryBuilder, 'negate' | 'build'>) => void
+  ): QueryBuilder {
+    // Change negate state to true for the callback.
+    this.negateNextQuery = true
+
+    // Call callback.
+    cb(this)
+
+    // Reset negate state to false.
+    this.negateNextQuery = false
+    return this
+  }
 
   collection(collections: CollectionMap): QueryBuilder {
     for (const [collection, entries] of utils.objectEntries(collections)) {

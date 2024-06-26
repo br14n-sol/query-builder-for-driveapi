@@ -2,12 +2,14 @@
 	"name": "query-builder-for-driveapi",
 	"author": "Brian Fernandez",
 	"description": "Easily generate queries for the Google Drive API.",
-	"version": "2.0.2",
+	"version": "3.0.0",
 	"license": "MIT",
 	"type": "module",
 	"main": "./lib/index.js",
 	"types": "./lib/index.d.ts",
-	"files": ["./lib"],
+	"files": [
+		"./lib"
+	],
 	"scripts": {
 		"prepare": "husky",
 		"lint": "biome lint ./src",

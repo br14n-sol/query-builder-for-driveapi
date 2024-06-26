@@ -38,7 +38,7 @@ export type VisibilityOpMap = PartialRecord<
 
 /**
  * Common mapping with operators for createdAt, updatedAt, viewedAt,
- * organizerCount and memberCount methods
+ * organizerCount and memberCount methods.
  */
 export type ComparisonOpMap<T> = PartialRecord<ComparisonOps, T | T[]>
 
@@ -60,13 +60,15 @@ export type QueryTemplateOptions = {
   }
 }
 
+type EntryType =
+  | string
+  | number
+  | (string | number)[]
+  | OpKeyMap
+  | Record<string, unknown | unknown[]>
+
 export type AddQueryOptions = {
   field: Field
   defOperator: Operator
-  entry:
-    | string
-    | number
-    | (string | number)[]
-    | Record<string, unknown | unknown[]>
-    | OpKeyMap
+  entry: EntryType
 }

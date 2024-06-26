@@ -8,9 +8,10 @@
 
 <div align="center">
 
-  ![license](https://img.shields.io/npm/l/query-builder-for-driveapi?color=blue)
+  ![license](https://img.shields.io/npm/l/query-builder-for-driveapi)
   ![node-current](https://img.shields.io/node/v/query-builder-for-driveapi?color=darkgreen)
   ![version](https://img.shields.io/npm/v/query-builder-for-driveapi?color=orange)
+  ![unpacked-size](https://img.shields.io/npm/unpacked-size/query-builder-for-driveapi)
   ![downloads](https://img.shields.io/npm/dt/query-builder-for-driveapi.svg)
 
 </div>
@@ -51,7 +52,7 @@ const query = qb.build()
 > To avoid "accidents", the `build()` method adds a `trashed = false` to the query by default. <br>
 > <b>Note: If you want to change this behavior in your query, simply call the `trashed()` method before calling the `build()` method.</b>
 
-## Supported Collections
+## Method for Collections
 
 <table>
 <thead>
@@ -77,7 +78,7 @@ collection({
 </tbody>
 </table>
 
-## Supported fields
+## Methods for fields
 
 <table>
 <thead>
@@ -267,6 +268,59 @@ memberCount({
   [K in Operator]?: number | number[]
 })
 ```
+
+</td></tr>
+</tbody>
+</table>
+
+## Other Methods
+
+<table>
+<thead>
+<tr><th align='left'>Method</th><th align='left'>Operator</th><th align='left'>Sample</th></tr>
+</thead>
+<tbody>
+<tr><td>
+
+```ts
+negate(() => void)
+```
+
+</td><td>
+
+- Not (¬)
+
+</td><td rowspan="2">
+
+```ts
+const qb = new QueryBuilder()
+
+// negates the queries in the callback
+qb.negate(() => {
+  qb.fileName('test.txt')
+  qb.createdAt('2023-01-01T00:00:00.000Z')
+})
+
+qb.content('some content')
+
+qb.build()
+//=> not name = 'test.txt'
+//      and not createdTime = '2023-01-01T00:00:00.000Z'
+//      and fullText = 'some content'
+//      and trashed = false
+
+```
+
+</td></tr>
+<tr><td>
+
+```ts
+build()
+```
+
+</td><td>
+
+- And (∧)
 
 </td></tr>
 </tbody>

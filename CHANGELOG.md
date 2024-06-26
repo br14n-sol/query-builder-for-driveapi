@@ -1,5 +1,46 @@
 # Changelog
 
+## [3.0.0](https://github.com/br14n-sol/query-builder-for-driveapi/compare/v2.0.2...v3.0.0) (2024-06-26)
+
+
+### ⚠ BREAKING CHANGES
+
+* drop support for cjs
+* This change sets the minimum required Node.js version to 18.20.2. Users with Node.js versions below this minimum will need to upgrade their Node.js installation to use this package.
+
+### Features
+
+* add `negate()` as a replacement for the `not()` method ([4df8732](https://github.com/br14n-sol/query-builder-for-driveapi/commit/4df873217b87d6d2d566c3fd71ccc0e7d17b743f))
+* add `QueryType.NUMBER` ([6b739cf](https://github.com/br14n-sol/query-builder-for-driveapi/commit/6b739cfdca6b413b50095eb5f744177898b8964b))
+* add `SharedDriveProperty` enum ([3a79b7a](https://github.com/br14n-sol/query-builder-for-driveapi/commit/3a79b7ade963d94dee0b86ffb3e77eee0cc92208))
+* add `trashed = false` to query if trashed is not specified ([4bf845c](https://github.com/br14n-sol/query-builder-for-driveapi/commit/4bf845cf24eb9fc8316c97fac4e057c3ff140f65))
+* add some utils ([45ccd1e](https://github.com/br14n-sol/query-builder-for-driveapi/commit/45ccd1e0c9414efd57d2cfb33d62352a1c9971df))
+* add support to `memberCount` ([072b85c](https://github.com/br14n-sol/query-builder-for-driveapi/commit/072b85c5b7ada902614583fde5028cdb0d7e28bd))
+* add support to `organizerCount` ([3acf4b9](https://github.com/br14n-sol/query-builder-for-driveapi/commit/3acf4b9c764052a599ed42424fd9acbab2557bdd))
+* add support to `orgUnitId` ([69bdaa0](https://github.com/br14n-sol/query-builder-for-driveapi/commit/69bdaa0a81476bf4f0049e47e96139f27a062f30))
+* add support to `sharedWithMe` ([2785264](https://github.com/br14n-sol/query-builder-for-driveapi/commit/2785264c0183f1cf87faa90dbfd892083f586771))
+* add support to `shortcutDetails.targetId` ([536f39a](https://github.com/br14n-sol/query-builder-for-driveapi/commit/536f39a55f25005828c463bcb9cf9a524a5befbd))
+* add support to `viewedByMeTime` ([e82c19e](https://github.com/br14n-sol/query-builder-for-driveapi/commit/e82c19e7d701e17c2ea0f6e1ca10eef6b67dc7fe))
+* change returned type of `getOperatorValueByKey()` ([01a7f9c](https://github.com/br14n-sol/query-builder-for-driveapi/commit/01a7f9c37ff088e4f0a9e4db9ead1bd31c6e2569))
+* replace old methods with new ones ([985b872](https://github.com/br14n-sol/query-builder-for-driveapi/commit/985b8729673fffd1ba85c9d846cee1570d3d83c2))
+
+
+### Bug Fixes
+
+* `getOperatorValueByKey()` returns the name instead of the value ([c4a205e](https://github.com/br14n-sol/query-builder-for-driveapi/commit/c4a205edd49ea5f387623c97a3871c0beb1b8758))
+* types of `isObject()` ([5a2379e](https://github.com/br14n-sol/query-builder-for-driveapi/commit/5a2379e982d35b9162a157616911f64efd979f8d))
+* types to `organizerCount()` and `memberCount()` ([8b4338d](https://github.com/br14n-sol/query-builder-for-driveapi/commit/8b4338d0babc3166777bc13ed6cd4458e9e74a5c))
+
+
+### Miscellaneous Chores
+
+* bump minimum Node.js version to 18.20.2 ([8911a97](https://github.com/br14n-sol/query-builder-for-driveapi/commit/8911a9766c741f6e85a7c03e1b17926eb67f2cca))
+
+
+### Build System
+
+* drop support for cjs ([4b85395](https://github.com/br14n-sol/query-builder-for-driveapi/commit/4b85395da7442a3a32ce2c6e7f5bf5800e84d6dd))
+
 ## [2.0.2](https://github.com/br14n-sol/query-builder-for-driveapi/compare/v2.0.1...v2.0.2) (2023-12-31)
 
 

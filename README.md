@@ -56,14 +56,10 @@ const query = qb.build()
 
 <table>
 <thead>
-<tr><th align='left'>Collection</th><th align='left'>Supported Operators</th><th align='left'>Method</th></tr>
+<tr><th align='left'>Collection</th><th align='left'>Method</th></tr>
 </thead>
 <tbody>
 <tr><td>parents</td><td rowspan="4">
-
-- In (∈)
-
-</td><td rowspan="4">
 
 ```ts
 collection({
@@ -82,7 +78,7 @@ collection({
 
 <table>
 <thead>
-<tr><th align='left'>Field</th><th align='left'>Supported Operators</th><th align='left'>Method</th></tr>
+<tr><th align='left'>Field</th><th align='left'>Operator (if applicable)</th><th align='left'>Method</th></tr>
 </thead>
 <tbody>
 <tr><td>name</td><td rowspan="2">
@@ -111,22 +107,14 @@ fileType({
 ```
 
 </td></tr>
-<tr><td>fullText</td><td>
-
-- Contains (⊇)
-
-</td><td>
+<tr><td>fullText</td><td></td><td>
 
 ```ts
 content(string | string[])
 ```
 
 </td></tr>
-<tr><td>properties</td><td rowspan="2">
-
-- Has (∋)
-
-</td><td>
+<tr><td>properties</td><td></td><td>
 
 ```ts
 property({
@@ -135,7 +123,7 @@ property({
 ```
 
 </td></tr>
-<tr><td>appProperties</td><td>
+<tr><td>appProperties</td><td></td><td>
 
 ```ts
 appProperty({
@@ -179,32 +167,28 @@ orgDriveId({
 ```
 
 </td></tr>
-<tr><td>sharedWithMe</td><td rowspan="4">
-
-- Equal to (=)
-
-</td><td>
+<tr><td>sharedWithMe</td><td></td><td>
 
 ```ts
 shared(boolean?) // default: true
 ```
 
 </td></tr>
-<tr><td>trashed</td><td>
+<tr><td>trashed</td><td></td><td>
 
 ```ts
 trashed(boolean?) // default: true
 ```
 
 </td></tr>
-<tr><td>starred</td><td>
+<tr><td>starred</td><td></td><td>
 
 ```ts
 starred(boolean?) // default: true
 ```
 
 </td></tr>
-<tr><td>hidden</td><td>
+<tr><td>hidden</td><td></td><td>
 
 ```ts
 hidden(boolean?) // default: true
@@ -277,7 +261,7 @@ memberCount({
 
 <table>
 <thead>
-<tr><th align='left'>Method</th><th align='left'>Operator</th><th align='left'>Sample</th></tr>
+<tr><th align='left'>Method</th><th align='left'>Sample</th></tr>
 </thead>
 <tbody>
 <tr><td>
@@ -285,10 +269,6 @@ memberCount({
 ```ts
 negate(() => void)
 ```
-
-</td><td>
-
-- Not (¬)
 
 </td><td rowspan="2">
 
@@ -298,14 +278,14 @@ const qb = new QueryBuilder()
 // negates the queries in the callback
 qb.negate(() => {
   qb.fileName('test.txt')
-  qb.createdAt('2023-01-01T00:00:00.000Z')
+  qb.createdAt('2023-01-01')
 })
 
 qb.content('some content')
 
 qb.build()
 //=> not name = 'test.txt'
-//      and not createdTime = '2023-01-01T00:00:00.000Z'
+//      and not createdTime = '2023-01-01'
 //      and fullText = 'some content'
 //      and trashed = false
 
@@ -317,10 +297,6 @@ qb.build()
 ```ts
 build()
 ```
-
-</td><td>
-
-- And (∧)
 
 </td></tr>
 </tbody>
